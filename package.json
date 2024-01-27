@@ -9,7 +9,7 @@
     "tauri": "tauri",
     "lint": "eslint --ignore-path .eslintignore --ext .js,.ts,.vue .",
     "lint:fix": "pnpm lint --fix",
-    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json|vue)\""
+    "format": "prettier --cache --log-level warn --ignore-path .gitignore --write \"**/*.+(js|ts|json|vue)\""
   },
   "dependencies": {
     "@tauri-apps/api": "^1.5.2",

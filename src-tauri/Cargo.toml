@@ -2,7 +2,7 @@
 name = "illiade"
 version = "0.0.0"
 description = "A Tauri App"
-authors = ["you"]
+authors = ["Hubert Jabłoński"]
 license = ""
 repository = ""
 edition = "2021"
