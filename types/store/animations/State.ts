@@ -1,5 +1,5 @@
 export interface AnimationsState {
-  dragAndDrop: boolean;
+  dragAndDrop: boolean
 }
 
 export default AnimationsState

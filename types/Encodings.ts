@@ -9,5 +9,5 @@ export enum FileEncodings {
   BASE64URL = 'base64url',
   LATIN1 = 'latin1',
   BINARY = 'binary',
-  HEX = 'hex'
+  HEX = 'hex',
 }

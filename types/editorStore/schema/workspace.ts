@@ -6,7 +6,7 @@ import { WorkspaceStore } from '../workspace'
 const workspaceSchema = (workspacePath: string): Schema<WorkspaceStore> => ({
   workspace: {
     type: ['string', 'null'],
-    default: 'home-window'
+    default: 'home-window',
   },
   files: {
     type: 'object',
@@ -18,29 +18,29 @@ const workspaceSchema = (workspacePath: string): Schema<WorkspaceStore> => ({
         type: 'string',
       },
       title: {
-        type: 'string'
+        type: 'string',
       },
       dir: {
-        type: 'string'
+        type: 'string',
       },
       lang: {
         type: 'string',
-        enum: KNOWN_LANGUAGES
+        enum: KNOWN_LANGUAGES,
       },
       encoding: {
         type: 'string',
       },
       editorContent: {
-        type: 'string'
+        type: 'string',
       },
       removed: {
-        type: 'boolean'
+        type: 'boolean',
       },
       saved: {
-        type: 'boolean'
+        type: 'boolean',
       },
     },
-    default: {}
+    default: {},
   },
   windows: {
     type: 'object',
@@ -50,13 +50,10 @@ const workspaceSchema = (workspacePath: string): Schema<WorkspaceStore> => ({
         properties: {
           __typename: {
             type: 'string',
-            enum: [
-              'ContainerWindow',
-              'TabsWindow'
-            ]
+            enum: ['ContainerWindow', 'TabsWindow'],
           },
           id: {
-            type: 'string'
+            type: 'string',
           },
           tabs: {
             type: 'array',
@@ -65,44 +62,43 @@ const workspaceSchema = (workspacePath: string): Schema<WorkspaceStore> => ({
               properties: {
                 __typename: {
                   type: 'string',
-                  enum: [
-                    'FileTab',
-                    'PageTab',
-                  ]
+                  enum: ['FileTab', 'PageTab'],
                 },
                 id: {
                   type: 'string',
-                }
-              }
-            }
+                },
+              },
+            },
           },
           children: {
             type: 'array',
             items: {
-              type: 'string'
-            }
+              type: 'string',
+            },
           },
           parent: {
-            type: ['string', 'null']
+            type: ['string', 'null'],
           },
           active: {
             type: 'number',
-          }
+          },
         },
-      }
+      },
     },
     default: {
       'home-window': {
         __typename: 'TabsWindow',
         id: 'home-window',
-        tabs: [{
-          __typename: 'PageTab',
-          id: 'Home'
-        }],
+        tabs: [
+          {
+            __typename: 'PageTab',
+            id: 'Home',
+          },
+        ],
         active: 0,
         parent: null,
-      }
-    }
+      },
+    },
   },
   active: {
     type: ['string', 'null'],
@@ -125,12 +121,12 @@ const workspaceSchema = (workspacePath: string): Schema<WorkspaceStore> => ({
       },
       openedChildren: {
         type: 'array',
-      }
+      },
     },
     default: {
       path: workspacePath,
-      openedChildren: []
-    }
+      openedChildren: [],
+    },
   },
   selectedFsNodes: {
     type: 'array',
@@ -139,22 +135,22 @@ const workspaceSchema = (workspacePath: string): Schema<WorkspaceStore> => ({
       properties: {
         __typename: {
           type: 'string',
-          enum: ['FileSystemFile', 'FileSystemDirectory']
+          enum: ['FileSystemFile', 'FileSystemDirectory'],
         },
         path: {
-          type: 'string'
+          type: 'string',
         },
         mass: {
           type: 'boolean',
-        }
+        },
       },
     },
-    default: []
+    default: [],
   },
   lastSelectedFsNode: {
     type: ['string', 'null'],
-    default: null
-  }
+    default: null,
+  },
 })
 
 export default workspaceSchema

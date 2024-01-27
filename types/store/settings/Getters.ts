@@ -1,6 +1,5 @@
-import { _GettersTree } from 'pinia'
-
 import { GetterWithState, Plugin, SettingsState } from '~/types'
+import { _GettersTree } from 'pinia'
 
 export enum SettingsGetterTypes {
   getDragAndDropPlugin = 'getDragAndDropPlugin',

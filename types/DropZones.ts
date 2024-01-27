@@ -3,5 +3,5 @@ export enum DropZone {
   LEFT = 'left',
   RIGHT = 'right',
   BOTTOM = 'bottom',
-  CENTER = 'center'
+  CENTER = 'center',
 }

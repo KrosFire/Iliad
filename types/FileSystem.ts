@@ -1,7 +1,7 @@
 export interface FsFile {
-  name: string;
-  path: string;
-  ext: string;
-  isDir: boolean;
-  isFile: boolean;
+  name: string
+  path: string
+  ext: string
+  isDir: boolean
+  isFile: boolean
 }

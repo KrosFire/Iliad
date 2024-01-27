@@ -7,11 +7,10 @@ const globalSchema: Schema<GlobalStore> = {
   lastWorkspacePath: {
     type: 'array',
     items: {
-      type: 'string'
+      type: 'string',
     },
-    default: [os.homedir()]
-  }
+    default: [os.homedir()],
+  },
 }
-
 
 export default globalSchema

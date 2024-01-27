@@ -162,7 +162,7 @@ export enum KnownLanguages {
   XQuery = 'XQuery',
   YAML = 'YAML',
   Zeek = 'Zeek',
-  Django = 'Django'
+  Django = 'Django',
 }
 
 export const KNOWN_LANGUAGES = Object.values(KnownLanguages)
