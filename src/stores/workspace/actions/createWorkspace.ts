@@ -1,6 +1,5 @@
+import path from '@tauri-apps/api/path'
 import { WorkspaceActions } from '~/types'
-import os from 'os'
-import path from 'path'
 import { v4 as uuid } from 'uuid'
 /**
  * Creates workspace or sets given window as one
@@ -32,9 +31,9 @@ const createWorkspace: WorkspaceActions['createWorkspace'] = async function (win
   if (!this.fileSystem) {
     this.fileSystem = {
       __typename: 'FileSystemDirectory',
-      path: os.homedir(),
-      name: path.basename(os.homedir()),
-      parent: path.dirname(os.homedir()),
+      path: await path.homeDir(),
+      name: await path.basename(await path.homeDir()),
+      parent: await path.dirname(await path.homeDir()),
       children: [],
       open: false,
     }

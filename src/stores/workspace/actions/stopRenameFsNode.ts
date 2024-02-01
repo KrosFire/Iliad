@@ -1,21 +1,21 @@
+import rename from '@/api/rename'
 import logger from '@/utils/logger'
+import { parse } from '@/utils/path'
 import { WorkspaceActions } from '~/types'
-import fs from 'fs'
-import path from 'path'
 
 const stopRenameFsNode: WorkspaceActions['stopRenameFsNode'] = async function (nodePath, newName) {
   const fsNode = this.getFsNode(nodePath)
 
   if (!fsNode || !fsNode.rename) return
 
-  let dirPath = path.parse(nodePath).dir
+  let dirPath = parse(nodePath).dir
 
   if (dirPath === '/') dirPath = ''
 
   const newPath = `${dirPath}/${newName}`
 
   try {
-    fs.renameSync(nodePath, newPath)
+    await rename(nodePath, newPath)
   } catch (err) {
     logger.error(`[stopRenameFsNode] ${err}`)
   }

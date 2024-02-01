@@ -1,23 +1,24 @@
+import pathExists from '@/api/pathExists'
+import readFile from '@/api/readFile'
 import logger from '@/utils/logger'
 import { WorkspaceActions } from '~/types'
-import chokidar from 'chokidar'
-import fs from 'fs/promises'
+import { watch } from 'tauri-plugin-fs-watch-api'
 
 const watchFile: WorkspaceActions['watchFile'] = async function (fileId) {
   const file = this.files[fileId]
 
   if (!file) return
 
-  file.watcher = chokidar
-    .watch(file.path, {
-      awaitWriteFinish: {
-        stabilityThreshold: 100,
-        pollInterval: 100,
-      },
-    })
-    .on('change', async () => {
+  file.watcher = await watch(
+    file.path,
+    async () => {
+      if (!pathExists(file.path)) {
+        this.files[file.id].watcher?.()
+        this.files[file.id].removed = true
+      }
+
       try {
-        const data = await fs.readFile(file.path, { encoding: file.encoding as BufferEncoding })
+        const data = await readFile(file.path, file.encoding)
 
         if (data === this.files[file.id].editorContent) {
           this.files[file.id].saved = true
@@ -27,11 +28,11 @@ const watchFile: WorkspaceActions['watchFile'] = async function (fileId) {
       } catch (err) {
         logger.error(`Error while reading file ${file.path}:\n${err}`)
       }
-    })
-    .on('unlink', () => {
-      this.files[file.id].watcher?.close()
-      this.files[file.id].removed = true
-    })
+    },
+    {
+      delayMs: 100,
+    },
+  )
 }
 
 export default watchFile

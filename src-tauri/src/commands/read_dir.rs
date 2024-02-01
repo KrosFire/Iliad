@@ -3,7 +3,7 @@ use std::fs;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
-pub struct ReadDirItem {
+struct ReadDirItem {
   pub path: String,
   pub name: String,
   pub is_dir: bool,

@@ -1,16 +1,16 @@
+import mkdir from '@/api/mkdir'
 import logger from '@/utils/logger'
+import path from '@tauri-apps/api/path'
 import { WorkspaceActions } from '~/types'
-import fs from 'fs/promises'
-import path from 'path'
 
 const createFolder: WorkspaceActions['createFolder'] = async function (dirPath) {
   try {
-    await fs.mkdir(dirPath)
+    await mkdir(dirPath)
   } catch (e) {
     logger.error(`[createFolder] ${e}`)
   }
 
-  const fsNode = this.getFsNode(path.dirname(dirPath))
+  const fsNode = this.getFsNode(await path.dirname(dirPath))
 
   if (!fsNode || fsNode.__typename !== 'FileSystemDirectory') {
     return

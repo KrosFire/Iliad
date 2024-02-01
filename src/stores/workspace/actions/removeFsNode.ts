@@ -1,6 +1,7 @@
+import removeDir from '@/api/removeDir'
+import removeFile from '@/api/removeFile'
 import logger from '@/utils/logger'
 import { WorkspaceActions } from '~/types'
-import fs from 'fs'
 
 /**
  * Removes a directory or a file from the workspace and the file system
@@ -14,21 +15,23 @@ const removeFsNode: WorkspaceActions['removeFsNode'] = async function (path) {
   }
 
   if (file.__typename === 'FileSystemDirectory' && file.watcher) {
-    file.watcher.close()
+    file.watcher()
   }
 
   if (file.__typename === 'FileSystemFile') {
-    fs.unlink(file.path, err => {
-      if (err) {
-        logger.error('[removeFsNode] Could not remove file')
-      }
-    })
+    try {
+      await removeFile(file.path)
+    } catch (err) {
+      logger.error('[removeFsNode] Could not remove file')
+    }
   } else {
-    fs.rmdir(file.path, err => {
+    try {
+      await removeDir(file.path, true)
+    } catch (err) {
       if (err) {
         logger.error('[removeFsNode] Could not remove directory')
       }
-    })
+    }
   }
 }
 

@@ -1,16 +1,16 @@
+import apiCreateFile from '@/api/createFile'
 import logger from '@/utils/logger'
+import path from '@tauri-apps/api/path'
 import { WorkspaceActions } from '~/types'
-import fs from 'fs/promises'
-import path from 'path'
 
 const createFile: WorkspaceActions['createFile'] = async function (filePath) {
   try {
-    await fs.open(filePath, 'w')
+    await apiCreateFile(filePath)
   } catch (e) {
     logger.error(`[createFile] ${e}`)
   }
 
-  const dirPath = path.dirname(filePath)
+  const dirPath = await path.dirname(filePath)
 
   const fsNode = this.getFsNode(dirPath)
 

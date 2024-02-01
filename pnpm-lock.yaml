@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@tauri-apps/api': ^1.5.2
   '@tauri-apps/cli': ^1.5.8
+  '@types/uuid': ^9.0.8
   '@typescript-eslint/eslint-plugin': ^6.19.1
   '@typescript-eslint/parser': ^6.19.1
   '@vitejs/plugin-vue': ^4.2.3
@@ -13,7 +14,9 @@ specifiers:
   eslint-plugin-vue: ^9.20.1
   pinia: ^2.1.7
   prettier: ^3.2.4
+  tauri-plugin-fs-watch-api: github:tauri-apps/tauri-plugin-fs-watch#v1
   typescript: ^5.0.2
+  uuid: ^9.0.1
   vite: ^5.0.0
   vue: ^3.3.4
   vue-tsc: ^1.8.5
@@ -21,10 +24,13 @@ specifiers:
 dependencies:
   '@tauri-apps/api': 1.5.3
   pinia: 2.1.7_uvcdd7474ilntvuyfubqjxprie
+  tauri-plugin-fs-watch-api: github.com/tauri-apps/tauri-plugin-fs-watch/f74123edf269381171c5ef40a9599c3e87bb096a
+  uuid: 9.0.1
   vue: 3.4.15_typescript@5.3.3
 
 devDependencies:
   '@tauri-apps/cli': 1.5.9
+  '@types/uuid': 9.0.8
   '@typescript-eslint/eslint-plugin': 6.19.1_khyhgvqstqrciwjpryeonfnplm
   '@typescript-eslint/parser': 6.19.1_xdgzedli73k7lw4xlyzszm74om
   '@vitejs/plugin-vue': 4.6.2_vite@5.0.12+vue@3.4.15
@@ -587,6 +593,10 @@ packages:
 
   /@types/semver/7.5.6:
     resolution: {integrity: sha512-dn1l8LaMea/IjDoHNd9J52uBbInB796CDffS6VdIxvqYCPSG0V0DzHp76GpaWnlhg88uYyPbXCDIowa86ybd5A==}
+    dev: true
+
+  /@types/uuid/9.0.8:
+    resolution: {integrity: sha512-jg+97EGIcY9AGHJJRaaPVgetKDsrTgbRjQ5Msgjh/DQKEFl0DtyRr/VCOyD1T2R1MNeWPK/u7JoGhlDZnKBAfA==}
     dev: true
 
   /@typescript-eslint/eslint-plugin/6.19.1_khyhgvqstqrciwjpryeonfnplm:
@@ -1783,6 +1793,11 @@ packages:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: true
 
+  /uuid/9.0.1:
+    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
+    hasBin: true
+    dev: false
+
   /vite/5.0.12:
     resolution: {integrity: sha512-4hsnEkG3q0N4Tzf1+t6NdN9dg/L3BM+q8SWgbSPnJvrgH2kgdyzfVJwbR1ic69/4uMJJ/3dqDZZE5/WwqW8U1w==}
     engines: {node: ^18.0.0 || >=20.0.0}
@@ -1910,3 +1925,11 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  github.com/tauri-apps/tauri-plugin-fs-watch/f74123edf269381171c5ef40a9599c3e87bb096a:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-fs-watch/tar.gz/f74123edf269381171c5ef40a9599c3e87bb096a}
+    name: tauri-plugin-fs-watch-api
+    version: 0.0.0
+    dependencies:
+      '@tauri-apps/api': 1.5.3
+    dev: false

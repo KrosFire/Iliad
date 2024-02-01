@@ -1,13 +1,16 @@
+import pathExists from '@/api/pathExists'
 import { getLangFromPath } from '@/supportedLangs'
+import { parse } from '@/utils/path'
 import { WorkspaceActions } from '~/types'
-import fs from 'fs'
-import path from 'path'
 
 const updateOpenedFilePath: WorkspaceActions['updateOpenedFilePath'] = async function (fileId, newPath) {
   if (!this.files[fileId]) return
-  if (!fs.existsSync(newPath)) return
 
-  const { dir, name } = path.parse(newPath)
+  const exists = await pathExists(newPath)
+
+  if (!exists) return
+
+  const { dir, name } = parse(newPath)
 
   this.files[fileId] = {
     ...this.files[fileId],

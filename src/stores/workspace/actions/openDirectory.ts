@@ -1,8 +1,8 @@
+import readDir from '@/api/readDir'
+import readLink from '@/api/readLink'
 import logger from '@/utils/logger'
 import { WorkspaceActions } from '~/types'
-import chokidar from 'chokidar'
-import fs from 'fs/promises'
-import pathModule from 'path'
+import { watch } from 'tauri-plugin-fs-watch-api'
 
 import compareFsNodes from '../helpers/compareFsNodes'
 
@@ -18,17 +18,15 @@ const openDirectory: WorkspaceActions['openDirectory'] = async function (path) {
   }
 
   try {
-    const files = await fs.readdir(path, { withFileTypes: true })
+    const files = await readDir(path, { withTypes: true })
 
     dir.children = []
 
     for (const file of files) {
-      const filePath = pathModule.join(path, file.name)
-
-      if (file.isDirectory()) {
+      if (file.is_dir) {
         dir.children.push({
           __typename: 'FileSystemDirectory',
-          path: filePath,
+          path: file.path,
           name: file.name,
           open: false,
           children: [],
@@ -37,11 +35,11 @@ const openDirectory: WorkspaceActions['openDirectory'] = async function (path) {
       } else {
         dir.children.push({
           __typename: 'FileSystemFile',
-          path: filePath,
+          path: file.path,
           name: file.name,
           parent: dir.path,
-          isLink: file.isSymbolicLink(),
-          linkTarget: file.isSymbolicLink() ? await fs.readlink(filePath) : undefined,
+          isLink: file.is_symlink,
+          linkTarget: file.is_symlink ? await readLink(file.path) : undefined,
         })
       }
     }
@@ -53,16 +51,10 @@ const openDirectory: WorkspaceActions['openDirectory'] = async function (path) {
   dir.children.sort(compareFsNodes)
   dir.open = true
 
-  dir.watcher = chokidar
-    .watch(path, {
-      depth: 0,
-      ignoreInitial: true,
-      ignorePermissionErrors: true,
-    })
-    .on('all', () => {
-      dir.watcher?.close()
-      this.openDirectory(path)
-    })
+  dir.watcher = await watch(path, () => {
+    dir.watcher?.()
+    this.openDirectory(path)
+  })
 }
 
 export default openDirectory

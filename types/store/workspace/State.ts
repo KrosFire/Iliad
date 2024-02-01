@@ -1,5 +1,4 @@
 import { Direction, FileEncodings, KnownLanguages } from '~/types'
-import { FSWatcher } from 'chokidar'
 import { StateTree } from 'pinia'
 
 export interface File {
@@ -12,7 +11,7 @@ export interface File {
   editorContent: string
   removed: boolean
   saved: boolean
-  watcher?: FSWatcher
+  watcher?: () => void
 }
 
 export type FileTab = {
@@ -54,7 +53,7 @@ export type FileSystemDirectory = {
   open: boolean
   rename?: boolean
   create?: 'file' | 'dir'
-  watcher?: FSWatcher
+  watcher?: () => void
 }
 
 export type FileSystemFile = {

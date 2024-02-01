@@ -14,10 +14,13 @@
   "dependencies": {
     "@tauri-apps/api": "^1.5.2",
     "pinia": "^2.1.7",
+    "tauri-plugin-fs-watch-api": "github:tauri-apps/tauri-plugin-fs-watch#v1",
+    "uuid": "^9.0.1",
     "vue": "^3.3.4"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.5.8",
+    "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^6.19.1",
     "@typescript-eslint/parser": "^6.19.1",
     "@vitejs/plugin-vue": "^4.2.3",
