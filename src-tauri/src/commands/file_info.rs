@@ -3,7 +3,7 @@ use std::fs;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
-struct FileInfo {
+pub struct FileInfo {
   pub path: String,
   pub name: String,
   pub is_dir: bool,

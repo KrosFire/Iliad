@@ -2,7 +2,7 @@ import readDir from '@/api/readDir'
 import readFile from '@/api/readFile'
 import catchErrors from '@/utils/catchErrors'
 import logger from '@/utils/logger'
-import path from '@tauri-apps/api/path'
+import { join } from '@tauri-apps/api/path'
 import { FileEncodings, PluginConfiguration, SettingsActions } from '~/types'
 
 const registerPlugin: SettingsActions['registerPlugin'] = async function (pluginDirectory) {
@@ -18,7 +18,7 @@ const registerPlugin: SettingsActions['registerPlugin'] = async function (plugin
     )
   }
 
-  const configPath = await path.join(pluginDirectory, 'package.json')
+  const configPath = await join(pluginDirectory, 'package.json')
 
   const bufferData = await catchErrors(readFile(configPath, FileEncodings.UTF8))
 

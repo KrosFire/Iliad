@@ -13,7 +13,7 @@ const closeDirectory: WorkspaceActions['closeDirectory'] = async function (path)
   }
 
   if (dir.watcher) {
-    dir.watcher.close()
+    dir.watcher()
   }
 
   dir.open = false

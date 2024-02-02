@@ -1,4 +1,4 @@
-import path from '@tauri-apps/api/path'
+import { basename, dirname, homeDir } from '@tauri-apps/api/path'
 import { WorkspaceActions } from '~/types'
 import { v4 as uuid } from 'uuid'
 /**
@@ -28,12 +28,14 @@ const createWorkspace: WorkspaceActions['createWorkspace'] = async function (win
   }
   this.workspace = workspace
 
+  const path = await homeDir()
+
   if (!this.fileSystem) {
     this.fileSystem = {
       __typename: 'FileSystemDirectory',
-      path: await path.homeDir(),
-      name: await path.basename(await path.homeDir()),
-      parent: await path.dirname(await path.homeDir()),
+      path,
+      name: await basename(path),
+      parent: await dirname(path),
       children: [],
       open: false,
     }
