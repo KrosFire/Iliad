@@ -46,7 +46,14 @@ export default defineComponent({
     const rename = computed(() => !!store.getFsNode(props.path)?.rename)
 
     const startDrag = (event: DragEvent) => {
-      event.dataTransfer?.setData('text/plain', props.path)
+      const selectedFiles = store.selectedFsNodes.map(({ path }) => path)
+
+      if (selectedFiles.includes(props.path)) {
+        event.dataTransfer?.setData('application/tauri-files', JSON.stringify(selectedFiles))
+        return
+      }
+
+      event.dataTransfer?.setData('application/tauri-files', JSON.stringify([props.path, ...selectedFiles]))
     }
 
     const selectFile = (mode: 'single' | 'multiple' | 'mass') => {

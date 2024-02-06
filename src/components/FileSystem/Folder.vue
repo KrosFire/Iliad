@@ -12,12 +12,6 @@
     @click.shift.stop.prevent="selectFolder('mass')"
     @click.exact.stop.prevent="expandFolder"
   >
-    <!-- <SvgAnim
-      :src="FolderIcon"
-      :src-load="fsNode?.open ? FolderIcon : FolderOpenIcon"
-      :state="fsNode?.open ? 'open' : 'close'"
-      class="folder-icon"
-    /> -->
     <span class="name">{{ name }}</span>
   </a>
   <input v-else ref="renameNodeInput" v-model="folderName" type="text" @blur="renameFolder" />
@@ -33,7 +27,6 @@
 <script lang="ts">
 import FolderIcon from '@/assets/folder.svg'
 import FolderOpenIcon from '@/assets/folder-open.svg'
-// import SvgAnim from '@/components/common/SvgAnim.vue'
 import { useWorkspaceStore } from '@/stores'
 import { sep } from '@tauri-apps/api/path'
 import { FileSystemDirectory } from '~/types'
@@ -44,7 +37,6 @@ import FileComponent from './File.vue'
 export default defineComponent({
   name: 'FolderComponent',
   components: {
-    // SvgAnim,
     FileComponent,
   },
   props: {
@@ -108,7 +100,14 @@ export default defineComponent({
     }
 
     const startDrag = (event: DragEvent) => {
-      event.dataTransfer?.setData('text/plain', props.path)
+      const selectedFiles = store.selectedFsNodes.map(({ path }) => path)
+
+      if (selectedFiles.includes(props.path)) {
+        event.dataTransfer?.setData('application/tauri-files', JSON.stringify(selectedFiles))
+        return
+      }
+
+      event.dataTransfer?.setData('application/tauri-files', JSON.stringify([props.path, ...selectedFiles]))
     }
 
     watch([create, createNodeInput], () => {

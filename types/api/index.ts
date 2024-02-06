@@ -82,6 +82,13 @@ export interface Commands {
     }
     return: boolean
   }
+
+  create_window: {
+    arguments: {
+      path: string
+    }
+    return: void
+  }
 }
 
 export interface ReadDirItem {

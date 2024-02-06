@@ -15,4 +15,4 @@ export interface SettingsState {
   }
 }
 
-// export default SettingsState
+export default SettingsState

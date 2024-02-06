@@ -1,8 +1,9 @@
-// import { useSettingsStore } from '@/stores'
-// import path from '@tauri-apps/api/path'
+import { useSettingsStore } from '@/stores'
 
-// TODO: Implement better plugin registration
 export default async () => {
-  // const settingsStore = useSettingsStore()
-  // settingsStore.registerPlugin(await path.join(path, 'src/plugins/DragAndDrop Animation'))
+  const settingsStore = useSettingsStore()
+
+  // TODO: From settingsStore, get get active animation plugin and register it
+
+  settingsStore.registerPlugin('DragAndDrop Animation')
 }

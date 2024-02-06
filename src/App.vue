@@ -9,7 +9,6 @@
 import FileSystem from '@/components/FileSystem/FileSystem.vue'
 import Workspace from '@/components/Workspace/Workspace.vue'
 import { useWorkspaceStore } from '@/stores'
-import { homeDir } from '@tauri-apps/api/path'
 import { defineComponent, onBeforeMount } from 'vue'
 
 // import EditorWorkspaceStore from './editorStore/workspaceStore'
@@ -21,10 +20,8 @@ export default defineComponent({
     Workspace,
   },
   props: {
-    workspacePath: {
-      type: String,
-      default: await homeDir(),
-    },
+    // eslint-disable-next-line vue/require-default-prop
+    workspacePath: String,
   },
   setup() {
     const workspaceStore = useWorkspaceStore()
@@ -74,7 +71,7 @@ html
 
 .container
   display: flex
-  flex-wrao: no-wrap
+  flex-wrap: no-wrap
   min-width: 100vw
 
 .gutter

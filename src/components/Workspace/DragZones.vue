@@ -4,37 +4,47 @@
       v-if="isDragAndDropAnimationActive"
       ref="canvas"
       class="drag-zone"
+      dropzone="move"
       @dragenter.prevent=""
+      @dragleave.prevent=""
       @dragover.prevent=""
-      @drop="handleDrop"
+      @drop.stop.prevent="handleDrop"
     />
     <slot />
   </div>
 </template>
 
 <script lang="ts">
-// import { startAnimation, stopAnimation } from '@/managers/animations.manager'
-import { useAnimationsStore } from '@/stores'
-import { DropZone } from '~/types'
+import createWindow from '@/api/createWindow'
+import fileInfo from '@/api/fileInfo'
+import { startAnimation, stopAnimation } from '@/managers/animations.manager'
+import { useAnimationsStore, useWorkspaceStore } from '@/stores'
+import { AnimationType, DropZone } from '~/types'
 import { computed, defineComponent, ref, watch } from 'vue'
 
 export default defineComponent({
   name: 'DragZones',
-  emits: ['drop'],
-  setup(_, { emit }) {
+  props: {
+    windowId: {
+      type: String,
+      required: true,
+    },
+  },
+  setup(props) {
     const canvas = ref<HTMLCanvasElement | null>(null)
     const animationId = ref<string | null>(null)
     const animationsStore = useAnimationsStore()
+    const workspaceStore = useWorkspaceStore()
     const isDragAndDropAnimationActive = computed(() => animationsStore.dragAndDrop)
 
     watch([isDragAndDropAnimationActive, canvas], async () => {
       if (!isDragAndDropAnimationActive.value || !canvas.value) {
-        // animationId.value && stopAnimation(animationId.value, AnimationType.DRAG_AND_DROP)
+        animationId.value && stopAnimation(animationId.value, AnimationType.DRAG_AND_DROP)
         animationId.value = null
         return
       }
 
-      // animationId.value = startAnimation(canvas.value, AnimationType.DRAG_AND_DROP) || null
+      animationId.value = startAnimation(canvas.value, AnimationType.DRAG_AND_DROP) || null
     })
 
     const getDropZone = (x: number, y: number): DropZone => {
@@ -47,7 +57,9 @@ export default defineComponent({
       return DropZone.CENTER
     }
 
-    const handleDrop = (e: DragEvent) => {
+    const handleDrop = async (e: DragEvent) => {
+      e.preventDefault()
+
       if (!canvas.value) return
 
       const x = e.offsetX / canvas.value.width
@@ -57,11 +69,26 @@ export default defineComponent({
       animationsStore.stopDragAndDropAnimation()
       if (!e.dataTransfer) return
 
-      const path = e.dataTransfer.getData('text/plain') || (e.dataTransfer.files[0] as unknown as { path: string }).path
+      const paths = JSON.parse(e.dataTransfer.getData('application/tauri-files') || '[]') as string[]
 
-      if (!path) return
+      if (!paths.length) return
 
-      emit('drop', path, position)
+      const filePaths: string[] = []
+
+      console.log('paths', paths)
+
+      for (const path of paths) {
+        const stats = await fileInfo(path)
+
+        if (stats.is_dir) {
+          createWindow(path)
+          continue
+        }
+
+        filePaths.push(path)
+      }
+
+      await workspaceStore.openFilesInWindow(filePaths, props.windowId, position)
     }
 
     return {
@@ -85,7 +112,6 @@ export default defineComponent({
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1;
     z-index: 999;
   }
 }

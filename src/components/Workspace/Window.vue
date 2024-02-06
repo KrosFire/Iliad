@@ -10,7 +10,7 @@
         @close="closeTab"
       />
     </ul>
-    <DragZones @drop="handleDrop">
+    <DragZones :window-id="windowId">
       <keep-alive>
         <component :is="view" :id="window.tabs[window.active].id" :window-id="windowId" />
       </keep-alive>
@@ -18,13 +18,11 @@
   </div>
 </template>
 <script lang="ts">
-import fileInfo from '@/api/fileInfo'
 import TabComponent from '@/components/Tabs/Tab.vue'
 import TextEditor from '@/components/Workspace/TextEditor.vue'
 import { useWorkspaceStore } from '@/stores/workspace'
 import Home from '@/views/Home.vue'
 import { TabsWindow } from '~/types'
-import { DropZone } from '~/types'
 import { computed, defineComponent } from 'vue'
 
 import DragZones from './DragZones.vue'
@@ -61,33 +59,11 @@ export default defineComponent({
       return !tab || tab.__typename === 'FileTab' ? 'TextEditor' : tab.id
     })
 
-    const handleDrop = async (path: string, zone: DropZone) => {
-      const stats = await fileInfo(path)
-
-      if (stats.is_dir) {
-        // electron.ipcRenderer.send('open-new-window', path)
-        return
-      }
-
-      const paths = [path]
-
-      if (store.selectedFsNodes.find(node => node.path === path)) {
-        paths.push(
-          ...store.selectedFsNodes
-            .filter(({ __typename, path: filePath }) => path !== filePath && __typename === 'FileSystemFile')
-            .map(node => node.path),
-        )
-      }
-
-      await store.openFilesInWindow(paths, props.windowId, zone)
-    }
-
     return {
       window: tabsWindow,
       view,
       openTab,
       closeTab,
-      handleDrop,
     }
   },
 })

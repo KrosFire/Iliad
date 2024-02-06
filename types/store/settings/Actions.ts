@@ -5,7 +5,7 @@ export enum SettingsActionTypes {
   RegisterPlugin = 'registerPlugin',
 }
 
-type RegisterPlugin = (pluginDirectory: string) => Promise<void>
+type RegisterPlugin = (pluginName: string) => Promise<void>
 
 export interface SettingsActions extends _ActionsTree {
   [SettingsActionTypes.RegisterPlugin]: ActionWithStore<RegisterPlugin, SettingsStore>

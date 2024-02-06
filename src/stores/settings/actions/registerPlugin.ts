@@ -1,33 +1,18 @@
-import readDir from '@/api/readDir'
-import readFile from '@/api/readFile'
-import catchErrors from '@/utils/catchErrors'
 import logger from '@/utils/logger'
-import { join } from '@tauri-apps/api/path'
-import { FileEncodings, PluginConfiguration, SettingsActions } from '~/types'
+import { SettingsActions } from '~/types'
 
-const registerPlugin: SettingsActions['registerPlugin'] = async function (pluginDirectory) {
-  const dir = await catchErrors(readDir(pluginDirectory))
+const registerPlugin: SettingsActions['registerPlugin'] = async function (pluginName) {
+  console.log('pluginName', pluginName)
+  const config = await import(`../../../plugins/${pluginName}/package.json`)
 
-  if (!dir) {
-    return
-  }
+  console.log('config', config)
 
-  if (!dir.includes('package.json')) {
-    return logger.error(
-      `[registerPlugin] Failed to register a plugin. Cannot find package.json file in ${pluginDirectory}`,
-    )
-  }
-
-  const configPath = await join(pluginDirectory, 'package.json')
-
-  const bufferData = await catchErrors(readFile(configPath, FileEncodings.UTF8))
-
-  if (!bufferData) {
-    return
+  if (!config) {
+    return logger.error(`[registerPlugin] Failed to register a plugin. Cannot find package.json file in ${pluginName}`)
   }
 
   try {
-    const { illiade } = JSON.parse(bufferData) as PluginConfiguration
+    const { illiade } = config
 
     this.plugins.push({
       type: illiade.type,

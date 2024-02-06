@@ -8,7 +8,7 @@
   />
 </template>
 <script lang="ts">
-import logger from '@/utils/Logger'
+import logger from '@/utils/logger'
 import { Direction } from '~/types'
 import { defineComponent, ref } from 'vue'
 
