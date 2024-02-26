@@ -1,14 +1,16 @@
 use std::fs;
 
+use crate::errors::Error;
+
 #[tauri::command]
-pub async fn write_file(path: &str, contents: &str, encoding: &str) -> Result<(), String> {
+pub async fn write_file(path: &str, contents: &str, encoding: &str) -> Result<(), Error> {
   match encoding {
     "utf8" => {
       let buffer = contents.as_bytes().to_vec();
 
       fs::write
         (path, buffer)
-        .map_err(|e| e.to_string())
+        .map_err(Into::into)
         .map(|_| ())
     },
     _ => {
@@ -16,7 +18,7 @@ pub async fn write_file(path: &str, contents: &str, encoding: &str) -> Result<()
 
       fs::write
         (path, buffer)
-        .map_err(|e| e.to_string())
+        .map_err(Into::into)
         .map(|_| ())
     }
   }

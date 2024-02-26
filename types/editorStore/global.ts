@@ -1,3 +1,3 @@
 export type GlobalStore = {
-  lastWorkspacePath: string[]
+  lastWorkspacePaths: string[]
 }

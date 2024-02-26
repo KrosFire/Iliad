@@ -2,6 +2,8 @@ use std::fs;
 
 use serde::{Deserialize, Serialize};
 
+use crate::errors::Error;
+
 #[derive(Serialize, Deserialize)]
 pub struct ReadDirItem {
   pub path: String,
@@ -12,11 +14,10 @@ pub struct ReadDirItem {
 }
 
 #[tauri::command]
-pub async fn read_dir(path: &str) -> Result<Vec<ReadDirItem>, String> {
+pub async fn read_dir(path: &str) -> Result<Vec<ReadDirItem>, Error> {
   fs::read_dir(path)
-    .map_err(|e| e.to_string())?
-    .map(|entry| {
-      let entry = entry.map_err(|e| e.to_string())?;
+    ?.map(|entry| {
+      let entry = entry?;
       let path = entry.path();
       let name = entry.file_name();
       let name = name.to_string_lossy().to_string();
@@ -31,5 +32,5 @@ pub async fn read_dir(path: &str) -> Result<Vec<ReadDirItem>, String> {
         is_symlink,
       })
     })
-    .collect::<Result<_, String>>()
+    .collect::<Result<_, Error>>()
 }

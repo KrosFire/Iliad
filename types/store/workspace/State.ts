@@ -6,7 +6,7 @@ export interface File {
   path: string
   title: string
   dir: string
-  lang: KnownLanguages | undefined
+  lang: KnownLanguages | null
   encoding: FileEncodings
   editorContent: string
   removed: boolean
@@ -72,7 +72,7 @@ export type FileSystemNode = FileSystemDirectory | FileSystemFile
 export type SelectedFsNode = {
   __typename: FileSystemNode['__typename']
   path: string
-  mass?: true
+  mass: boolean
 }
 
 export interface WorkspaceState extends StateTree {

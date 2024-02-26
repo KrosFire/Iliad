@@ -1,4 +1,6 @@
 import { FileEncodings } from '..'
+import { GlobalStore } from '../editorStore/global'
+import { WorkspaceStore } from '../editorStore/workspace'
 
 export interface Commands {
   read_dir: {
@@ -71,7 +73,7 @@ export interface Commands {
   rename: {
     arguments: {
       path: string
-      new_name: string
+      newName: string
     }
     return: void
   }
@@ -89,6 +91,40 @@ export interface Commands {
     }
     return: void
   }
+
+  close_window: {
+    return: void
+  }
+
+  get_state:
+    | {
+        arguments: {
+          storeType: 'global'
+        }
+        return: GlobalStore
+      }
+    | {
+        arguments: {
+          storeType: 'local'
+        }
+        return: WorkspaceStore
+      }
+
+  update_state:
+    | {
+        arguments: {
+          storeType: 'global'
+          newState: string
+        }
+        return: void
+      }
+    | {
+        arguments: {
+          storeType: 'local'
+          newState: string
+        }
+        return: void
+      }
 }
 
 export interface ReadDirItem {

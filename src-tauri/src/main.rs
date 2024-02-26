@@ -1,16 +1,64 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use tauri::Manager;
+use std::{fs, path::PathBuf, sync::Mutex};
+
+use commands::state::consts::{GlobalState, LocalState, WindowState};
+use tauri::{api::path::home_dir, Manager};
 
 mod commands;
+mod errors;
 
-fn main() {
+fn main() {    
     tauri::Builder::default()
         .setup(|app| {
-            let _main_window = app.get_window("main")
-                .unwrap()
-                .set_title("Home");
+            let handle = app.handle();
+
+            let global_state_saved = fs::read_to_string(
+                home_dir()
+                        .unwrap()
+                        .join(".illiade")
+                        .join("global_config.json")
+                    )
+                    .unwrap_or(String::new());
+
+            handle.manage(Mutex::new(serde_json::from_str::<GlobalState>(&global_state_saved)
+                .unwrap_or_default()));
+        
+            let global_state = serde_json::from_str::<GlobalState>(&global_state_saved)
+                .unwrap_or_default();
+
+            handle.manage(Mutex::new(WindowState {
+                state: global_state.lastWorkspacePaths
+                    .iter()
+                    .map(|path| {
+                        let local_state = serde_json::from_str::<LocalState>(
+                            &fs::read_to_string(
+                                PathBuf::from(path)
+                                        .join(".illiade")
+                                        .join("workspace_config.json")
+                                )
+                                .unwrap_or(String::new())
+                            )
+                            .unwrap_or(LocalState::default());
+
+                        (path.clone(), local_state)
+                    })
+                    .collect()
+            }));
+
+            global_state.lastWorkspacePaths
+                .iter()
+                .for_each(|path| {
+                    tauri::WindowBuilder::new(
+                        &handle,
+                        path.clone(), /* the unique window label */
+                        tauri::WindowUrl::App("index.html".into()),
+                    )
+                    .title(path.clone().split('/').last().unwrap())
+                    .build()
+                    .unwrap();
+                });
 
             Ok(())
         })
@@ -28,6 +76,9 @@ fn main() {
             commands::rename::rename,
             commands::path_exists::path_exists,
             commands::create_window::create_window,
+            commands::close_window::close_window,
+            commands::state::get_state::get_state,
+            commands::state::update_state::update_state,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

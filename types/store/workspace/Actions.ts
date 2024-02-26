@@ -13,7 +13,7 @@ type CreateContainerWindow = (
   direction: Direction,
 ) => Promise<string>
 type CreateTabsWindow = (parent: string | null, tabs: Tab[], index?: number) => Promise<string>
-type CreateWorkspace = (windowId?: string) => Promise<string>
+type CreateWorkspace = (workspacePath?: string) => Promise<string>
 type OpenFile = (filePath: string, encoding?: FileEncodings) => Promise<string>
 type OpenFilesInWindow = (
   filePaths: string[],

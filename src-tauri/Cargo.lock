@@ -1260,6 +1260,7 @@ dependencies = [
  "tauri",
  "tauri-build",
  "tauri-plugin-fs-watch",
+ "thiserror",
 ]
 
 [[package]]

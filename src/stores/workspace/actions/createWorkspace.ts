@@ -5,30 +5,24 @@ import { v4 as uuid } from 'uuid'
  * Creates workspace or sets given window as one
  * Returns id of new workspace
  */
-const createWorkspace: WorkspaceActions['createWorkspace'] = async function (windowId) {
-  let workspace
-
-  if (windowId) workspace = windowId
-  else {
-    windowId = uuid()
-    this.windows[windowId] = {
-      __typename: 'TabsWindow',
-      id: windowId,
-      tabs: [
-        {
-          __typename: 'PageTab',
-          id: 'Home',
-        },
-      ],
-      active: 0,
-      parent: null,
-    }
-
-    workspace = windowId
+const createWorkspace: WorkspaceActions['createWorkspace'] = async function (workspacePath) {
+  const workspaceId = uuid()
+  this.windows[workspaceId] = {
+    __typename: 'TabsWindow',
+    id: workspaceId,
+    tabs: [
+      {
+        __typename: 'PageTab',
+        id: 'Home',
+      },
+    ],
+    active: 0,
+    parent: null,
   }
-  this.workspace = workspace
 
-  const path = await homeDir()
+  this.workspace = workspaceId
+
+  const path = workspacePath ?? (await homeDir())
 
   if (!this.fileSystem) {
     this.fileSystem = {
@@ -41,7 +35,9 @@ const createWorkspace: WorkspaceActions['createWorkspace'] = async function (win
     }
   }
 
-  return windowId
+  console.log('createWorkspace', workspaceId, this.workspace, this.fileSystem, this.windows)
+
+  return workspaceId
 }
 
 export default createWorkspace

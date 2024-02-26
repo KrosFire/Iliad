@@ -11,7 +11,7 @@ import Workspace from '@/components/Workspace/Workspace.vue'
 import { useWorkspaceStore } from '@/stores'
 import { defineComponent, onBeforeMount } from 'vue'
 
-// import EditorWorkspaceStore from './editorStore/workspaceStore'
+import EditorWorkspaceStore from './editorStore/workspaceStore'
 
 export default defineComponent({
   name: 'App',
@@ -23,23 +23,24 @@ export default defineComponent({
     // eslint-disable-next-line vue/require-default-prop
     workspacePath: String,
   },
-  setup() {
+  setup(props) {
     const workspaceStore = useWorkspaceStore()
 
     onBeforeMount(async () => {
-      // const editorWorkspaceStore = new EditorWorkspaceStore(
-      //   workspaceStore.fileSystem?.path || props.workspacePath,
-      //   workspaceStore,
-      // )
+      const editorWorkspaceStore = new EditorWorkspaceStore(
+        workspaceStore.fileSystem?.path || props.workspacePath!,
+        workspaceStore,
+      )
 
-      // const savedState = editorWorkspaceStore.getWorkspaceState()
+      await editorWorkspaceStore.init()
 
-      // if (savedState) {
-      //   workspaceStore.initState(savedState)
-      //   return
-      // }
+      const savedState = editorWorkspaceStore.getWorkspaceState()
 
-      if (!workspaceStore.workspace) await workspaceStore.createWorkspace()
+      if (savedState) {
+        await workspaceStore.initState(savedState)
+      }
+
+      if (!workspaceStore.workspace) await workspaceStore.createWorkspace(props.workspacePath)
 
       if (!workspaceStore.workspace) throw Error('Could not create workspace')
     })

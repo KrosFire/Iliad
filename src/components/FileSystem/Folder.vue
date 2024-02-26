@@ -107,7 +107,7 @@ export default defineComponent({
         return
       }
 
-      event.dataTransfer?.setData('application/tauri-files', JSON.stringify([props.path, ...selectedFiles]))
+      event.dataTransfer?.setData('application/tauri-files', JSON.stringify([props.path]))
     }
 
     watch([create, createNodeInput], () => {

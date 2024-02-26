@@ -7,7 +7,7 @@ const selectFsNode: WorkspaceActions['selectFsNode'] = async function (path, mod
 
   switch (mode) {
     case 'single':
-      this.selectedFsNodes = [{ __typename: fsNode.__typename, path }]
+      this.selectedFsNodes = [{ __typename: fsNode.__typename, path, mass: false }]
       this.lastSelectedFsNode = fsNode.path
       break
     case 'multiple':
@@ -15,15 +15,15 @@ const selectFsNode: WorkspaceActions['selectFsNode'] = async function (path, mod
         this.selectedFsNodes = this.selectedFsNodes.filter(({ path }) => path !== fsNode.path)
         this.lastSelectedFsNode = null
       } else {
-        this.selectedFsNodes.push({ __typename: fsNode.__typename, path })
+        this.selectedFsNodes.push({ __typename: fsNode.__typename, path, mass: false })
         // Remove `mass` flag from all selected nodes
-        this.selectedFsNodes = this.selectedFsNodes.map(({ __typename, path }) => ({ __typename, path }))
+        this.selectedFsNodes = this.selectedFsNodes.map(({ __typename, path }) => ({ __typename, path, mass: false }))
         this.lastSelectedFsNode = fsNode.path
       }
       break
     case 'mass':
       if (!this.lastSelectedFsNode) {
-        this.selectedFsNodes = [{ __typename: fsNode.__typename, path }]
+        this.selectedFsNodes = [{ __typename: fsNode.__typename, path, mass: false }]
         this.lastSelectedFsNode = fsNode.path
       } else {
         const cleanedSelectedFsNodes = this.selectedFsNodes.filter(({ mass }) => !mass)

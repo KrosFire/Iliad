@@ -1,8 +1,10 @@
 use std::fs;
 
+use crate::errors::Error;
+
 #[tauri::command]
-pub async fn mkdir(path: &str) -> Result<(), String> {
+pub async fn mkdir(path: &str) -> Result<(), Error> {
   fs::create_dir(path)
-    .map_err(|e| e.to_string())
+    .map_err(Into::into)
     .map(|_| ())
 }

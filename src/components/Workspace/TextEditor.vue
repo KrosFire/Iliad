@@ -4,7 +4,7 @@
     :value="file.editorContent"
     class="editorBody"
     theme="twilight"
-    :lang="file.lang && file.lang.toLowerCase()"
+    :lang="file.lang ? file.lang.toLowerCase() : undefined"
     :options="options"
     :style="style"
     @keydown.ctrl.s="save"

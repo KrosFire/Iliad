@@ -165,7 +165,7 @@ export enum KnownLanguages {
   Django = 'Django',
 }
 
-export const KNOWN_LANGUAGES = Object.values(KnownLanguages)
+export const KNOWN_LANGUAGES = [...Object.values(KnownLanguages)] as const
 
 export type SupportedLanguages = {
   [key in KnownLanguages]: string[]
