@@ -1,0 +1,30 @@
+{
+  "name": "drag-and-drop-plugin",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "illiade": {
+    "title": "DragAndDrop Animation",
+    "icon": "",
+    "description": "Simple drag and drop animation for Illiade",
+    "author": "Hubert Jabłoński",
+    "keywords": [
+      "dragAndDrop",
+      "animation"
+    ],
+    "repository": "",
+    "homepage": "",
+    "marketplace": "",
+    "type": "animation"
+  },
+  "scripts": {
+    "build": "tsc && vite build && cp package.json dist/"
+  },
+  "devDependencies": {
+    "typescript": "^4.6.4",
+    "vite": "^3.1.0"
+  },
+  "dependencies": {
+    "@types/offscreencanvas": "^2019.7.3"
+  }
+}

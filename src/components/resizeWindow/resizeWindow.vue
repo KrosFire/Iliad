@@ -8,7 +8,6 @@
   />
 </template>
 <script lang="ts">
-import logger from '@/utils/logger'
 import { Direction } from '~/types'
 import { defineComponent, ref } from 'vue'
 
@@ -65,7 +64,6 @@ export default defineComponent({
 
     const startResize = (e: Event) => {
       e.stopPropagation()
-      logger.debug('Starting resizing')
 
       switch (type.value) {
         case Direction.HORIZONTAL:
@@ -80,8 +78,6 @@ export default defineComponent({
       }
 
       const removeListeners = () => {
-        logger.debug('Stop resizing')
-
         document.removeEventListener('mousemove', resizeHorizontally)
         document.removeEventListener('mousemove', resizeVertically)
         document.removeEventListener('mouseup', removeListeners)

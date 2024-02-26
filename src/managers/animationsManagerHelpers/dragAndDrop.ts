@@ -88,7 +88,7 @@ export default async (animationsStore: AnimationsStore, settingsStore: SettingsS
 
   let pluginThread: Worker | undefined
 
-  let pluginPath = activePlugin ? `../../plugins/${activePlugin.name}/index.js` : ''
+  let pluginPath = activePlugin ? `../../plugins/${activePlugin.name}/dist/index.js` : ''
 
   if (activePlugin) {
     pluginThread = new Worker(new URL(pluginPath, import.meta.url))
@@ -100,7 +100,7 @@ export default async (animationsStore: AnimationsStore, settingsStore: SettingsS
 
       if (!activePlugin) return
 
-      pluginPath = `../../plugins/${activePlugin.name}/index.js`
+      pluginPath = `../../plugins/${activePlugin.name}/dist/index.js`
 
       pluginThread = new Worker(new URL(pluginPath, import.meta.url))
     }

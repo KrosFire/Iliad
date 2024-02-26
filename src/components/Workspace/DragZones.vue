@@ -75,8 +75,6 @@ export default defineComponent({
 
       const filePaths: string[] = []
 
-      console.log('paths', paths)
-
       for (const path of paths) {
         const stats = await fileInfo(path)
 
