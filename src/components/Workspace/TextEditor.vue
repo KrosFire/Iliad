@@ -94,6 +94,8 @@ export default defineComponent({
 .editorBody {
   width: 100%;
   height: 100%;
+  flex-grow: 1;
+  border: 3px solid purple;
 
   .ace_gutter {
     z-index: unset;

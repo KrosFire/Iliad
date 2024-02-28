@@ -91,6 +91,7 @@ export default defineComponent({
   text-decoration: none;
   cursor: pointer;
   user-select: none;
+  -webkit-user-select: none;
 
   &--selected {
     background-color: blue;
@@ -106,6 +107,7 @@ export default defineComponent({
 
   .file-name {
     user-select: none;
+    -webkit-user-select: none;
   }
 }
 </style>

@@ -152,6 +152,7 @@ export default defineComponent({
   color: #ddd;
   padding: 3px;
   user-select: none;
+  -webkit-user-select: none;
   cursor: pointer;
   text-decoration: none;
   display: block;
@@ -184,5 +185,6 @@ export default defineComponent({
 .indent {
   margin-left: 10px;
   user-select: none;
+  -webkit-user-select: none;
 }
 </style>

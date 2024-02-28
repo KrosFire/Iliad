@@ -53,6 +53,9 @@ export default defineComponent({
 *
   box-sizing: border-box
 
+html
+  overflow: hidden
+
 body
   margin: 0
   min-height: 100vh

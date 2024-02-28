@@ -6,6 +6,7 @@
         :id="id"
         :key="id"
         :index="+index"
+        :active="index === window.active"
         @click="openTab"
         @close="closeTab"
       />
@@ -75,6 +76,8 @@ export default defineComponent({
   flex: 1;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 
   &-content {
     width: 100%;
@@ -107,20 +110,13 @@ export default defineComponent({
 
   .card-section {
     display: flex;
-    flex: 1;
+    flex: 0 0 30px;
     list-style: none;
     margin: 0;
     padding: 0;
     flex-direction: row;
-    height: 30px;
     overflow-x: auto;
     background-color: lightblue;
-  }
-
-  .editorBody {
-    height: 100%;
-    width: 100%;
-    flex-basis: 100%;
   }
 }
 </style>
