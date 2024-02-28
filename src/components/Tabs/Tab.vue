@@ -1,19 +1,29 @@
 <template>
   <li :class="{ tab: true, 'tab--active': active }">
-    <div class="tabContent">
-      <button class="button" @click="$emit('click', index)">
+    <div class="tabContent" @click="$emit('click', index)">
+      <span class="fileName">
         {{ title }}
+      </span>
+      <button v-show="!saved" class="saveButton" @click="saveFile">
+        <font-awesome-icon :icon="faFloppyDisk" />
       </button>
-      <div class="closeIcon" @click="$emit('close', index)">X</div>
+      <button class="closeIcon" @click.capture="$emit('close', index)">
+        <font-awesome-icon :icon="faCircleXmark" />
+      </button>
     </div>
   </li>
 </template>
 <script lang="ts">
 import { useWorkspaceStore } from '@/stores'
+import { faCircleXmark, faFloppyDisk } from '@fortawesome/free-regular-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { computed, defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'TabComponent',
+  components: {
+    FontAwesomeIcon,
+  },
   props: {
     id: {
       type: String,
@@ -33,9 +43,18 @@ export default defineComponent({
     const store = useWorkspaceStore()
 
     const title = computed<string>(() => (store.files[props.id] ? store.files[props.id].title : props.id))
+    const saved = computed<boolean>(() => store.files[props.id]?.saved)
+
+    const saveFile = () => {
+      store.saveFile(props.id)
+    }
 
     return {
       title,
+      saved,
+      faFloppyDisk,
+      faCircleXmark,
+      saveFile,
     }
   },
 })
@@ -55,6 +74,8 @@ export default defineComponent({
   }
 
   .tabContent {
+    display: flex;
+    justify-content: center;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
     -webkit-bordertop-right-radius: 10px;
@@ -67,12 +88,30 @@ export default defineComponent({
     cursor: pointer;
     position: relative;
     width: 100%;
+    transition: 0.3s;
 
-    .button {
+    &:hover {
+      background-color: #f0f0f0;
+    }
+
+    .fileName {
+      padding: 0 10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-user-drag: none;
+      display: flex;
+      align-items: center;
+    }
+
+    .saveButton {
       width: 100%;
       height: 100%;
       flex: 1;
-      padding: 0 20px;
+      padding: 0;
+      margin-right: 15px;
       text-decoration: none;
       text-align: center;
       overflow: hidden;
@@ -85,10 +124,10 @@ export default defineComponent({
       border: none;
       cursor: pointer;
       transition: 0.3s;
-      background-color: #fff;
+      background: transparent;
 
-      &:hover {
-        background-color: #f0f0f0;
+      &:hover svg {
+        transform: scale(1.2);
       }
     }
 
@@ -96,12 +135,19 @@ export default defineComponent({
       position: absolute;
       top: 0;
       bottom: 0;
-      right: 5px;
+      right: 0;
       display: flex;
       align-items: center;
       cursor: pointer;
       user-select: none;
       -webkit-user-select: none;
+      background: transparent;
+      border: none;
+      transition: 0.3s;
+
+      &:hover svg {
+        transform: scale(1.2);
+      }
     }
   }
 }
