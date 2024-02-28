@@ -51,10 +51,16 @@ const openDirectory: WorkspaceActions['openDirectory'] = async function (path) {
   dir.children.sort(compareFsNodes)
   dir.open = true
 
-  dir.watcher = await watch(path, () => {
-    dir.watcher?.()
-    this.openDirectory(path)
-  })
+  dir.watcher = await watch(
+    path,
+    () => {
+      dir.watcher?.()
+      this.openDirectory(path)
+    },
+    {
+      delayMs: 100,
+    },
+  )
 }
 
 export default openDirectory

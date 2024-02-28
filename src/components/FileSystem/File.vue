@@ -11,6 +11,7 @@
     @click.exact.stop.prevent="selectFile('single')"
     @dragstart="startDrag"
     @dblclick.prevent="openFile"
+    @click.exact.right="openContextMenu"
   >
     <div class="file-icon">
       <!-- TODO -->
@@ -23,7 +24,9 @@
 </template>
 
 <script lang="ts">
+import getContextMenu from '@/contextMenus/fileContextMenu'
 import { useWorkspaceStore } from '@/stores'
+import { showMenu } from 'tauri-plugin-context-menu'
 import { computed, defineComponent, ref } from 'vue'
 
 export default defineComponent({
@@ -44,6 +47,7 @@ export default defineComponent({
     const fileName = ref(props.name)
     const selected = computed(() => store.selectedFsNodes.some(({ path: selectedPath }) => props.path === selectedPath))
     const rename = computed(() => !!store.getFsNode(props.path)?.rename)
+    const fileNode = computed(() => store.getFsNode(props.path))
 
     const startDrag = (event: DragEvent) => {
       const selectedFiles = store.selectedFsNodes.map(({ path }) => path)
@@ -71,11 +75,22 @@ export default defineComponent({
       store.stopRenameFsNode(props.path, fileName.value)
     }
 
+    const openContextMenu = (e: MouseEvent) => {
+      e.preventDefault()
+
+      if (!fileNode.value || fileNode.value.__typename === 'FileSystemDirectory') {
+        return
+      }
+
+      showMenu(getContextMenu(fileNode.value, store))
+    }
+
     return {
       startDrag,
       openFile,
       selectFile,
       renameFile,
+      openContextMenu,
       selected,
       rename,
       fileName,

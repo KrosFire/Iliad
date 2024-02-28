@@ -14,10 +14,15 @@
       "all": false,
       "shell": {
         "all": false,
-        "open": true
+        "open": "^((mailto:\\w+)|(tel:\\w+)|(https?://\\w+)|/).+"
       },
       "path": {
         "all": true
+      },
+      "clipboard": {
+        "all": false,
+        "readText": false,
+        "writeText": true
       }
     },
     "bundle": {

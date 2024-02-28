@@ -89,6 +89,7 @@ export default defineComponent({
     position: relative;
     width: 100%;
     transition: 0.3s;
+    padding-right: 25px;
 
     &:hover {
       background-color: #f0f0f0;
@@ -101,17 +102,14 @@ export default defineComponent({
       white-space: nowrap;
       user-select: none;
       -webkit-user-select: none;
-      -webkit-user-drag: none;
-      display: flex;
-      align-items: center;
+      max-width: 100px;
     }
 
     .saveButton {
       width: 100%;
       height: 100%;
       flex: 1;
-      padding: 0;
-      margin-right: 15px;
+      padding: 0 5px;
       text-decoration: none;
       text-align: center;
       overflow: hidden;

@@ -8,9 +8,10 @@
     }"
     :draggable="true"
     @dragstart="startDrag"
-    @click.meta.stop.prevent="selectFolder('multiple')"
-    @click.shift.stop.prevent="selectFolder('mass')"
-    @click.exact.stop.prevent="expandFolder"
+    @click.meta.stop.left.prevent="selectFolder('multiple')"
+    @click.shift.stop.left.prevent="selectFolder('mass')"
+    @click.exact.stop.left.prevent="expandFolder"
+    @click.exact.right="openContextMenu"
   >
     <span class="name">{{ name }}</span>
   </a>
@@ -27,9 +28,11 @@
 <script lang="ts">
 import FolderIcon from '@/assets/folder.svg'
 import FolderOpenIcon from '@/assets/folder-open.svg'
+import getContextMenu from '@/contextMenus/folderContextMenu'
 import { useWorkspaceStore } from '@/stores'
 import { sep } from '@tauri-apps/api/path'
 import { FileSystemDirectory } from '~/types'
+import { showMenu } from 'tauri-plugin-context-menu'
 import { computed, defineComponent, ref, watch } from 'vue'
 
 import FileComponent from './File.vue'
@@ -110,6 +113,16 @@ export default defineComponent({
       event.dataTransfer?.setData('application/tauri-files', JSON.stringify([props.path]))
     }
 
+    const openContextMenu = (e: MouseEvent) => {
+      e.preventDefault()
+
+      if (!fsNode.value) {
+        return
+      }
+
+      showMenu(getContextMenu(fsNode.value, store))
+    }
+
     watch([create, createNodeInput], () => {
       if (create.value && createNodeInput.value) {
         newNodeName.value = ''
@@ -142,6 +155,7 @@ export default defineComponent({
       expandFolder,
       selectFolder,
       startDrag,
+      openContextMenu,
     }
   },
 })

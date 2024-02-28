@@ -63,6 +63,7 @@ fn main() {
             Ok(())
         })
         .plugin(tauri_plugin_fs_watch::init())
+        .plugin(tauri_plugin_context_menu::init())
         .invoke_handler(tauri::generate_handler![
             commands::read_dir::read_dir,
             commands::read_file::read_file,
