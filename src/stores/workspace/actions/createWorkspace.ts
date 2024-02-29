@@ -35,8 +35,6 @@ const createWorkspace: WorkspaceActions['createWorkspace'] = async function (wor
     }
   }
 
-  console.log('createWorkspace', workspaceId, this.workspace, this.fileSystem, this.windows)
-
   return workspaceId
 }
 

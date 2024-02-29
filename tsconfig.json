@@ -3,12 +3,7 @@
     "target": "ES6",
     "useDefineForClassFields": true,
     "module": "ESNext",
-    "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost",
-    ],
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
     "skipLibCheck": true,
 
     /* Bundler mode */

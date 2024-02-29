@@ -6,7 +6,7 @@ const transition = (initial: Position, dest: Position, progress: number): Positi
   x: initial.x * (1 - progress) + dest.x * progress,
   y: initial.y * (1 - progress) + dest.y * progress,
   height: initial.height * (1 - progress) + dest.height * progress,
-  width: initial.width * (1 - progress) + dest.width * progress
+  width: initial.width * (1 - progress) + dest.width * progress,
 })
 
 const getDropZone = (x: number, y: number, inOrOut: boolean): DropZone => {
@@ -15,7 +15,7 @@ const getDropZone = (x: number, y: number, inOrOut: boolean): DropZone => {
 
   if (y >= 0.75 && y <= 1) return inOrOut ? DropZone.BOTTOM_CORNER : DropZone.BOTTOM
   if (y >= 0 && y <= 0.25) return inOrOut ? DropZone.TOP_CORNER : DropZone.TOP
-  
+
   if (x <= 0) return DropZone.LEFT_CORNER
   if (x >= 1) return DropZone.RIGHT_CORNER
 
@@ -33,11 +33,7 @@ const draw = (gl: WebGLRenderingContext, position: Position) => {
 
   setRectangle(gl, position.x, position.y, position.width, position.height)
 
-  gl.drawArrays(
-    gl.TRIANGLES,
-    0,
-    6
-  )
+  gl.drawArrays(gl.TRIANGLES, 0, 6)
 }
 
 const startAnimation = (canvas: OffscreenCanvas, width: number, height: number): AnimationHandlers => {
@@ -48,7 +44,7 @@ const startAnimation = (canvas: OffscreenCanvas, width: number, height: number):
   const state = {
     width,
     height,
-  };
+  }
 
   resizeCanvasToDisplaySize(canvas, state)
 
@@ -68,14 +64,7 @@ const startAnimation = (canvas: OffscreenCanvas, width: number, height: number):
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
 
   gl.enableVertexAttribArray(positionLocation)
-  gl.vertexAttribPointer(
-    positionLocation,
-    2,
-    gl.FLOAT,
-    false,
-    0,
-    0
-  )
+  gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0)
 
   // ------------------ Set color ---------------------
 
@@ -95,18 +84,16 @@ const startAnimation = (canvas: OffscreenCanvas, width: number, height: number):
     destinationPosition: Position,
     initialTime: number | null,
     canvas: OffscreenCanvas,
-    gl: WebGLRenderingContext): void => {
-  
-    currentAnimationId = self.requestAnimationFrame((currentTime) => {
+    gl: WebGLRenderingContext,
+  ): void => {
+    currentAnimationId = self.requestAnimationFrame(currentTime => {
       if (stopAnimation) return
       if (initialTime === null) initialTime = currentTime
 
-      const progress = Math.min(
-        (currentTime - initialTime) / 2,
-        100)
-  
-      const position = transition(initialPosition, destinationPosition, progress/100)
-      
+      const progress = Math.min((currentTime - initialTime) / 2, 100)
+
+      const position = transition(initialPosition, destinationPosition, progress / 100)
+
       resizeCanvasToDisplaySize(canvas, state)
       draw(gl, position)
       if (progress < 100) makeTransition(initialPosition, destinationPosition, initialTime, canvas, gl)
@@ -117,94 +104,99 @@ const startAnimation = (canvas: OffscreenCanvas, width: number, height: number):
     const x = e.offsetX / canvas.width
     const y = e.offsetY / canvas.height
     const dropZone = getDropZone(x, y, inOrOut)
-  
+
     if (previousDropZone === null) {
       resizeCanvasToDisplaySize(canvas, state)
       draw(gl, positions[dropZone])
     } else if (previousDropZone !== dropZone) {
       const initialPosition = positions[previousDropZone]
       const destinationPosition = positions[dropZone]
-  
+
       makeTransition(initialPosition, destinationPosition, null, canvas, gl)
     }
-  
+
     previousDropZone = dropZone
   }
 
   const updateAnimationOnInOrOut = (e: DragEvent) => updateAnimation(e, true)
 
   return {
-    'stop': () => {
+    stop: () => {
       self.cancelAnimationFrame(currentAnimationId)
       stopAnimation = true
     },
-    'dragover': updateAnimation,
-    'dragenter': updateAnimationOnInOrOut,
-    'dragleave': updateAnimationOnInOrOut,
-    'resize': (width: number, height: number) => {
+    dragover: updateAnimation,
+    dragenter: updateAnimationOnInOrOut,
+    dragleave: updateAnimationOnInOrOut,
+    resize: (width: number, height: number) => {
       state.width = width
       state.height = height
       resizeCanvasToDisplaySize(canvas, state)
-    }
+    },
   }
 }
 
 type AnimationHandlers = {
-  'stop': () => void,
-  'dragover': (e: DragEvent) => void,
-  'dragenter': (e: DragEvent) => void,
-  'dragleave': (e: DragEvent) => void
-  'resize': (width: number, height: number) => void
+  stop: () => void
+  dragover: (e: DragEvent) => void
+  dragenter: (e: DragEvent) => void
+  dragleave: (e: DragEvent) => void
+  resize: (width: number, height: number) => void
 }
 
 const animations = new Map<string, AnimationHandlers>()
 
-self.onmessage = (e) => {
+self.onmessage = e => {
   switch (e.data.type) {
     case 'start': {
-      const { canvas, id, width, height } = e.data as { canvas: OffscreenCanvas, id: string, width: number, height: number }
+      const { canvas, id, width, height } = e.data as {
+        canvas: OffscreenCanvas
+        id: string
+        width: number
+        height: number
+      }
 
       if (!canvas) throw new Error('No canvas provided')
       if (!id) throw new Error('No id provided')
 
       animations.set(id, startAnimation(canvas, width, height))
-      break;
+      break
     }
     case 'resize': {
-      const { id, width, height } = e.data as { id: string, width: number, height: number }
+      const { id, width, height } = e.data as { id: string; width: number; height: number }
 
       if (!id) throw new Error('No id provided')
       const handlers = animations.get(id)
-      
+
       handlers?.resize(width, height)
-      break;
+      break
     }
     case 'dragover': {
-      const { id, event } = e.data as { id: string, event: DragEvent }
+      const { id, event } = e.data as { id: string; event: DragEvent }
 
       if (!id) throw new Error('No id provided')
       const handlers = animations.get(id)
       if (handlers) handlers.dragover(event)
       else throw new Error('No animation found')
-      break;
+      break
     }
     case 'dragenter': {
-      const { id, event } = e.data as { id: string, event: DragEvent }
+      const { id, event } = e.data as { id: string; event: DragEvent }
 
       if (!id) throw new Error('No id provided')
       const handlers = animations.get(id)
       if (handlers) handlers.dragenter(event)
       else throw new Error('No animation found')
-      break;
+      break
     }
     case 'dragleave': {
-      const { id, event } = e.data as { id: string, event: DragEvent }
+      const { id, event } = e.data as { id: string; event: DragEvent }
 
       if (!id) throw new Error('No id provided')
       const handlers = animations.get(id)
       if (handlers) handlers.dragleave(event)
       else throw new Error('No animation found')
-      break;
+      break
     }
     case 'stop': {
       const { id: stopId } = e.data as { id: string }
@@ -213,7 +205,7 @@ self.onmessage = (e) => {
       else throw new Error('No animation found')
 
       animations.delete(stopId)
-      break;
+      break
     }
   }
 }

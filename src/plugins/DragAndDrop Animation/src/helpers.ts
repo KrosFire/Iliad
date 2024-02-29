@@ -5,56 +5,56 @@ export const positions: { [key in DropZone]: Position } = {
     x: 0,
     y: 0,
     width: 100,
-    height: 100
+    height: 100,
   },
   [DropZone.LEFT]: {
     x: 0,
     y: 0,
     width: 25,
-    height: 100
+    height: 100,
   },
   [DropZone.RIGHT]: {
     x: 75,
     y: 0,
     width: 25,
-    height: 100
+    height: 100,
   },
   [DropZone.TOP]: {
     x: 0,
     y: 75,
     width: 100,
-    height: 25
+    height: 25,
   },
   [DropZone.BOTTOM]: {
     x: 0,
     y: 0,
     width: 100,
-    height: 25
+    height: 25,
   },
   [DropZone.LEFT_CORNER]: {
     x: 0,
     y: 0,
     width: 0,
-    height: 100
+    height: 100,
   },
   [DropZone.RIGHT_CORNER]: {
     x: 100,
     y: 0,
     width: 25,
-    height: 100
+    height: 100,
   },
   [DropZone.TOP_CORNER]: {
     x: 0,
     y: 100,
     width: 100,
-    height: 25
+    height: 25,
   },
   [DropZone.BOTTOM_CORNER]: {
     x: 0,
     y: 0,
     width: 100,
-    height: 0
-  }
+    height: 0,
+  },
 }
 
 export const vertexShaderSource = `
@@ -76,4 +76,3 @@ export const fragmentShaderSource = `
     gl_FragColor = vec4(u_color.xyz / 255.0, u_color.w);
   }
 `
-

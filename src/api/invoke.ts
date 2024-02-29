@@ -3,6 +3,10 @@ import { invoke as invokeRustCmd } from '@tauri-apps/api'
 import { Commands } from '~/types'
 
 function invoke<C extends keyof Commands>(cmd: C): Promise<Commands[C]['return']>
+function invoke<C extends keyof Commands, A extends Record<string, unknown>>(
+  cmd: C,
+  args: Commands[C] extends { arguments: A } ? A : never,
+): Promise<Commands[C]['return']>
 async function invoke<C extends keyof Commands, A extends Record<string, unknown>>(
   cmd: C,
   args?: Commands[C] extends { arguments: A } ? A : undefined,

@@ -12,9 +12,12 @@ const watchFile: WorkspaceActions['watchFile'] = async function (fileId) {
   file.watcher = await watch(
     file.path,
     async () => {
-      if (!pathExists(file.path)) {
+      const pathExistsResult = await pathExists(file.path)
+
+      if (!pathExistsResult) {
         this.files[file.id].watcher?.()
         this.files[file.id].removed = true
+        return
       }
 
       try {

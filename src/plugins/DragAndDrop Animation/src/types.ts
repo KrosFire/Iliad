@@ -1,8 +1,8 @@
 export interface Position {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
+  x: number
+  y: number
+  width: number
+  height: number
 }
 
 export enum DropZone {
@@ -14,10 +14,10 @@ export enum DropZone {
   LEFT_CORNER = 'left-corner',
   RIGHT_CORNER = 'right-corner',
   BOTTOM_CORNER = 'bottom-corner',
-  CENTER = 'center'
+  CENTER = 'center',
 }
 
 export interface UpdateAnimationContext {
-  canvas: HTMLCanvasElement;
-  gl: WebGLRenderingContext;
+  canvas: HTMLCanvasElement
+  gl: WebGLRenderingContext
 }
