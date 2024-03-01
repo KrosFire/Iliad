@@ -25,6 +25,7 @@ describe('startRenameFsNode action', () => {
 
   beforeEach(() => {
     setActivePinia(createPinia())
+    vi.restoreAllMocks()
   })
 
   it('start file observation', async () => {
