@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "illiade": {
-    "title": "DragAndDrop Animation",
+    "title": "DragAndDrop",
     "icon": "",
     "description": "Simple drag and drop animation for Illiade",
     "author": "Hubert Jabłoński",

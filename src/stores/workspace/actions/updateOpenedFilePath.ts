@@ -10,6 +10,8 @@ const updateOpenedFilePath: WorkspaceActions['updateOpenedFilePath'] = async fun
 
   if (!exists) return
 
+  this.files[fileId].watcher?.()
+
   const { dir, name } = parse(newPath)
 
   this.files[fileId] = {

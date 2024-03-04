@@ -22,9 +22,11 @@ const stopRenameFsNode: WorkspaceActions['stopRenameFsNode'] = async function (n
 
   fsNode.rename = false
 
-  Object.values(this.files)
-    .filter(file => file.path.startsWith(nodePath))
-    .forEach(file => this.updateOpenedFilePath(file.id, file.path.replace(nodePath, newPath)))
+  await Promise.all(
+    Object.values(this.files)
+      .filter(file => file.path.startsWith(nodePath))
+      .map(file => this.updateOpenedFilePath(file.id, file.path.replace(nodePath, newPath))),
+  )
 }
 
 export default stopRenameFsNode

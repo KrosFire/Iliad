@@ -9,6 +9,8 @@ const watchFile: WorkspaceActions['watchFile'] = async function (fileId) {
 
   if (!file) return
 
+  file.watcher?.()
+
   file.watcher = await watch(
     file.path,
     async () => {
@@ -19,6 +21,8 @@ const watchFile: WorkspaceActions['watchFile'] = async function (fileId) {
         this.files[file.id].removed = true
         return
       }
+
+      this.files[file.id].removed = false
 
       try {
         const data = await readFile(file.path, file.encoding)

@@ -1,10 +1,10 @@
 <template>
-  <li :class="{ tab: true, 'tab--active': active }">
+  <li :class="{ tab: true, 'tab--active': active, 'tab--removed': isFile && removed }">
     <div class="tabContent" @click="$emit('click', index)">
       <span class="fileName">
         {{ title }}
       </span>
-      <button v-show="!saved" class="saveButton" @click="saveFile">
+      <button v-show="isFile && !saved" class="saveButton" @click="saveFile">
         <font-awesome-icon :icon="faFloppyDisk" />
       </button>
       <button class="closeIcon" @click.capture="$emit('close', index)">
@@ -44,6 +44,8 @@ export default defineComponent({
 
     const title = computed<string>(() => (store.files[props.id] ? store.files[props.id].title : props.id))
     const saved = computed<boolean>(() => store.files[props.id]?.saved)
+    const removed = computed<boolean>(() => store.files[props.id]?.removed)
+    const isFile = computed<boolean>(() => !!store.files[props.id])
 
     const saveFile = () => {
       store.saveFile(props.id)
@@ -52,8 +54,10 @@ export default defineComponent({
     return {
       title,
       saved,
+      removed,
       faFloppyDisk,
       faCircleXmark,
+      isFile,
       saveFile,
     }
   },
@@ -71,6 +75,10 @@ export default defineComponent({
     .tabContent {
       border-color: purple;
     }
+  }
+
+  &--removed.tab {
+    text-decoration: line-through;
   }
 
   .tabContent {
