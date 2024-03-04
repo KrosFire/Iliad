@@ -28,6 +28,7 @@
     "uuid": "^9.0.1",
     "vue": "^3.3.4",
     "vue3-ace-editor": "^2.2.4",
+    "vue3-smooth-dnd": "^0.0.6",
     "zod": "^3.22.4"
   },
   "devDependencies": {

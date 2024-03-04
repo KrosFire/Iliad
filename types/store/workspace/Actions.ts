@@ -41,6 +41,7 @@ type CreateFile = (path: string) => Promise<void>
 type CreateFolder = (path: string) => Promise<void>
 type InitState = (store: EditorWorkspaceStore) => Promise<void>
 type WatchFile = (fileId: string) => Promise<void>
+type ChangeTabs = (windowId: string, tabs: Tab[]) => Promise<void>
 
 export interface WorkspaceActions extends _ActionsTree {
   openTab: ActionWithStore<OpenTab, WorkspaceStore>
@@ -72,6 +73,7 @@ export interface WorkspaceActions extends _ActionsTree {
   createFolder: ActionWithStore<CreateFolder, WorkspaceStore>
   initState: ActionWithStore<InitState, WorkspaceStore>
   watchFile: ActionWithStore<WatchFile, WorkspaceStore>
+  changeTabs: ActionWithStore<ChangeTabs, WorkspaceStore>
 }
 
 export default WorkspaceActions

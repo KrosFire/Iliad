@@ -1,6 +1,12 @@
 <template>
   <div v-if="window.tabs.length" class="window" style="flex-grow: 1">
-    <ul class="card-section">
+    <Container
+      class="tabs-section"
+      orientation="horizontal"
+      group-name="tabs"
+      :get-child-payload="getChildPayload"
+      @drop="handleTabDrop"
+    >
       <TabComponent
         v-for="({ id }, index) in window.tabs"
         :id="id"
@@ -10,12 +16,12 @@
         @click="openTab"
         @close="closeTab"
       />
-    </ul>
-    <DragZones :window-id="windowId">
+    </Container>
+    <DropZones :window-id="windowId">
       <keep-alive>
         <component :is="view" :id="window.tabs[window.active].id" :window-id="windowId" />
       </keep-alive>
-    </DragZones>
+    </DropZones>
   </div>
 </template>
 <script lang="ts">
@@ -25,8 +31,9 @@ import { useWorkspaceStore } from '@/stores/workspace'
 import Home from '@/views/Home.vue'
 import { TabsWindow } from '~/types'
 import { computed, defineComponent } from 'vue'
+import { Container, Draggable, DropResult } from 'vue3-smooth-dnd'
 
-import DragZones from './DragZones.vue'
+import DropZones from './DropZones.vue'
 
 export default defineComponent({
   name: 'WindowComponent',
@@ -34,7 +41,9 @@ export default defineComponent({
     TabComponent,
     TextEditor,
     Home,
-    DragZones,
+    DropZones,
+    Container,
+    Draggable,
   },
   props: {
     windowId: {
@@ -60,11 +69,37 @@ export default defineComponent({
       return !tab || tab.__typename === 'FileTab' ? 'TextEditor' : tab.id
     })
 
+    const handleTabDrop = (dropResult: DropResult) => {
+      const { removedIndex, addedIndex, payload } = dropResult
+      if (removedIndex === null && addedIndex === null) {
+        return
+      }
+
+      const result = [...tabsWindow.value.tabs]
+      let itemToAdd = payload
+
+      if (removedIndex !== null) {
+        itemToAdd = result.splice(removedIndex, 1)[0]
+      }
+
+      if (addedIndex !== null) {
+        result.splice(addedIndex, 0, itemToAdd)
+      }
+
+      store.changeTabs(props.windowId, result)
+    }
+
+    const getChildPayload = (index: number) => {
+      return tabsWindow.value.tabs[index]
+    }
+
     return {
       window: tabsWindow,
       view,
       openTab,
       closeTab,
+      handleTabDrop,
+      getChildPayload,
     }
   },
 })
@@ -108,8 +143,8 @@ export default defineComponent({
     background-color: pink;
   }
 
-  .card-section {
-    display: flex;
+  .tabs-section {
+    display: flex !important;
     flex: 0 0 30px;
     list-style: none;
     margin: 0;

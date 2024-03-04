@@ -1,5 +1,6 @@
 import { WorkspaceActions } from '~/types'
 
+import changeTabs from './changeTabs'
 import closeDirectory from './closeDirectory'
 import closeTab from './closeTab'
 import closeWindow from './closeWindow'
@@ -60,6 +61,7 @@ const actions: WorkspaceActions = {
   stopFsNodeCreation,
   watchFile,
   initState,
+  changeTabs,
 }
 
 export default actions

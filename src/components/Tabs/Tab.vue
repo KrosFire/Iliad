@@ -1,28 +1,32 @@
 <template>
-  <li :class="{ tab: true, 'tab--active': active, 'tab--removed': isFile && removed }">
-    <div class="tabContent" @click="$emit('click', index)">
-      <span class="fileName">
-        {{ title }}
-      </span>
-      <button v-show="isFile && !saved" class="saveButton" @click="saveFile">
-        <font-awesome-icon :icon="faFloppyDisk" />
-      </button>
-      <button class="closeIcon" @click.capture="$emit('close', index)">
-        <font-awesome-icon :icon="faCircleXmark" />
-      </button>
+  <Draggable>
+    <div :class="{ tab: true, 'tab--active': active, 'tab--removed': isFile && removed }">
+      <div class="tabContent" @click="$emit('click', index)">
+        <span class="fileName">
+          {{ title }}
+        </span>
+        <button v-show="isFile && !saved" class="saveButton" @click="saveFile">
+          <font-awesome-icon :icon="faFloppyDisk" />
+        </button>
+        <button class="closeIcon" @click.capture="$emit('close', index)">
+          <font-awesome-icon :icon="faCircleXmark" />
+        </button>
+      </div>
     </div>
-  </li>
+  </Draggable>
 </template>
 <script lang="ts">
 import { useWorkspaceStore } from '@/stores'
 import { faCircleXmark, faFloppyDisk } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { computed, defineComponent } from 'vue'
+import { Draggable } from 'vue3-smooth-dnd'
 
 export default defineComponent({
   name: 'TabComponent',
   components: {
     FontAwesomeIcon,
+    Draggable,
   },
   props: {
     id: {

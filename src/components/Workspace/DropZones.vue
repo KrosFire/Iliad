@@ -1,9 +1,9 @@
 <template>
-  <div class="drag-zones">
+  <div class="drop-zones">
     <canvas
       v-if="isDragAndDropAnimationActive"
       ref="canvas"
-      class="drag-zone"
+      class="drop-zone"
       dropzone="move"
       @dragenter.prevent=""
       @dragleave.prevent=""
@@ -23,7 +23,7 @@ import { AnimationType, DropZone } from '~/types'
 import { computed, defineComponent, ref, watch } from 'vue'
 
 export default defineComponent({
-  name: 'DragZones',
+  name: 'DropZones',
   props: {
     windowId: {
       type: String,
@@ -99,12 +99,12 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.drag-zones {
+.drop-zones {
   position: relative;
   width: 100%;
   height: 100%;
 
-  .drag-zone {
+  .drop-zone {
     position: absolute;
     top: 0;
     left: 0;
