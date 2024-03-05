@@ -1,5 +1,5 @@
 import { basename, dirname, homeDir } from '@tauri-apps/api/path'
-import { WorkspaceActions } from '~/types'
+import { Pages, WorkspaceActions } from '~/types'
 import { v4 as uuid } from 'uuid'
 /**
  * Creates workspace or sets given window as one
@@ -13,7 +13,7 @@ const createWorkspace: WorkspaceActions['createWorkspace'] = async function (wor
     tabs: [
       {
         __typename: 'PageTab',
-        id: 'Home',
+        id: Pages.StartingPage,
       },
     ],
     active: 0,

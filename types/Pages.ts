@@ -1,3 +1,3 @@
 export enum Pages {
-  HOME = 'Home',
+  StartingPage = 'StartingPage',
 }

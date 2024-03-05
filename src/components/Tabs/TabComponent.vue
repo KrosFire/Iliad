@@ -1,3 +1,32 @@
+<script setup lang="ts">
+import { useWorkspaceStore } from '@/stores'
+import { faCircleXmark, faFloppyDisk } from '@fortawesome/free-regular-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { computed } from 'vue'
+import { Draggable } from 'vue3-smooth-dnd'
+
+const props = defineProps<{
+  id: string
+  index: number
+  active: boolean
+}>()
+
+defineEmits<{
+  click: [number]
+  close: [number]
+}>()
+
+const store = useWorkspaceStore()
+
+const title = computed<string>(() => (store.files[props.id] ? store.files[props.id].title : props.id))
+const saved = computed<boolean>(() => store.files[props.id]?.saved)
+const removed = computed<boolean>(() => store.files[props.id]?.removed)
+const isFile = computed<boolean>(() => !!store.files[props.id])
+
+const saveFile = () => {
+  store.saveFile(props.id)
+}
+</script>
 <template>
   <Draggable>
     <div :class="{ tab: true, 'tab--active': active, 'tab--removed': isFile && removed }">
@@ -15,58 +44,6 @@
     </div>
   </Draggable>
 </template>
-<script lang="ts">
-import { useWorkspaceStore } from '@/stores'
-import { faCircleXmark, faFloppyDisk } from '@fortawesome/free-regular-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { computed, defineComponent } from 'vue'
-import { Draggable } from 'vue3-smooth-dnd'
-
-export default defineComponent({
-  name: 'TabComponent',
-  components: {
-    FontAwesomeIcon,
-    Draggable,
-  },
-  props: {
-    id: {
-      type: String,
-      default: '',
-    },
-    index: {
-      type: Number,
-      default: 0,
-    },
-    active: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  emits: ['click', 'close'],
-  setup(props) {
-    const store = useWorkspaceStore()
-
-    const title = computed<string>(() => (store.files[props.id] ? store.files[props.id].title : props.id))
-    const saved = computed<boolean>(() => store.files[props.id]?.saved)
-    const removed = computed<boolean>(() => store.files[props.id]?.removed)
-    const isFile = computed<boolean>(() => !!store.files[props.id])
-
-    const saveFile = () => {
-      store.saveFile(props.id)
-    }
-
-    return {
-      title,
-      saved,
-      removed,
-      faFloppyDisk,
-      faCircleXmark,
-      isFile,
-      saveFile,
-    }
-  },
-})
-</script>
 <style lang="scss" scoped>
 .tab {
   position: relative;

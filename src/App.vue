@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import FileSystem from '@/components/FileSystem/FileSystem.vue'
-import Workspace from '@/components/Workspace/Workspace.vue'
+import Workspace from '@/components/Workspace/WorkspaceComponent.vue'
 import { useWorkspaceStore } from '@/stores'
 import { defineComponent, onBeforeMount } from 'vue'
 

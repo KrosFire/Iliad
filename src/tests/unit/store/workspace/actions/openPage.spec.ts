@@ -30,7 +30,7 @@ describe('openPage action', () => {
       active: 'win1',
     })
 
-    await workspace.openPage(Pages.HOME, 'win1')
+    await workspace.openPage(Pages.StartingPage, 'win1')
 
     expect(workspace.windows['win1']).toEqual({
       __typename: 'TabsWindow',
@@ -38,7 +38,7 @@ describe('openPage action', () => {
       tabs: [
         {
           __typename: 'PageTab',
-          id: Pages.HOME,
+          id: Pages.StartingPage,
         },
       ],
       active: 0,
@@ -57,7 +57,7 @@ describe('openPage action', () => {
 
     const createWorkspace = vi.spyOn(workspace, 'createWorkspace')
 
-    await workspace.openPage(Pages.HOME)
+    await workspace.openPage(Pages.StartingPage)
 
     expect(createWorkspace).toHaveBeenCalledOnce()
   })

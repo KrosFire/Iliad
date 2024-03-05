@@ -1,4 +1,4 @@
-import { Direction, FileEncodings, KnownLanguages } from '~/types'
+import { Direction, FileEncodings, KnownLanguages, Pages } from '~/types'
 import { StateTree } from 'pinia'
 
 export interface File {
@@ -21,7 +21,7 @@ export type FileTab = {
 
 export type PageTab = {
   __typename: 'PageTab'
-  id: string
+  id: Pages
 }
 
 export type Tab = FileTab | PageTab

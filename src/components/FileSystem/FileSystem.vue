@@ -1,30 +1,17 @@
+<script setup lang="ts">
+import { useWorkspaceStore } from '@/stores'
+import { computed } from 'vue'
+
+import FolderComponent from './FolderComponent.vue'
+
+const store = useWorkspaceStore()
+const path = computed(() => store.fileSystem?.path)
+</script>
 <template>
   <div class="fs">
-    <Folder v-if="path" :path="path" />
+    <FolderComponent v-if="path" :path="path" />
   </div>
 </template>
-
-<script lang="ts">
-import { useWorkspaceStore } from '@/stores'
-import { computed, defineComponent } from 'vue'
-
-import Folder from './Folder.vue'
-
-export default defineComponent({
-  components: {
-    Folder,
-  },
-  setup() {
-    const store = useWorkspaceStore()
-    const path = computed(() => store.fileSystem?.path)
-
-    return {
-      path,
-    }
-  },
-})
-</script>
-
 <style lang="sass" scoped>
 .fs
   width: 250px
