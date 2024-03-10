@@ -26,7 +26,7 @@ const view = computed(() => {
 })
 </script>
 <template>
-  <div v-if="tabsWindow.tabs.length" class="window" style="flex-grow: 1">
+  <div v-if="tabsWindow.tabs.length" class="relative overflow-hidden flex flex-col min-w-0 flex-1" style="flex-grow: 1">
     <TabsSection :window-id="windowId" :tabs="tabsWindow.tabs" :active-tab="tabsWindow.active" />
     <DropZones :window-id="windowId">
       <keep-alive>
@@ -35,54 +35,3 @@ const view = computed(() => {
     </DropZones>
   </div>
 </template>
-<style lang="scss">
-.window {
-  height: 100%;
-  min-width: 0;
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-
-  &-content {
-    width: 100%;
-    height: 100%;
-  }
-
-  &-children {
-    display: flex;
-    width: 100%;
-    height: 100%;
-
-    &--vertical {
-      flex-direction: column;
-    }
-
-    &--horizontal {
-      flex-direction: row;
-    }
-  }
-
-  .gutter {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 5px;
-    height: 100%;
-    z-index: 100;
-    background-color: pink;
-  }
-
-  .tabs-section {
-    display: flex !important;
-    flex: 0 0 30px;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    flex-direction: row;
-    overflow-x: auto;
-    background-color: lightblue;
-  }
-}
-</style>

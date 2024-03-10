@@ -2,6 +2,7 @@
 import ResizeWindow from '@/components/ResizeWindow/ResizeWindow.vue'
 import WindowComponent from '@/components/Workspace/WindowComponent.vue'
 import { useWorkspaceStore } from '@/stores/workspace'
+import { Direction } from '~/types'
 import { computed, h } from 'vue'
 
 const store = useWorkspaceStore()
@@ -24,7 +25,13 @@ const renderWindows = (windowId: string): any => {
     return h(
       'div',
       {
-        class: `window-container window-container--${window.direction}`,
+        class: [
+          'flex',
+          {
+            'flex-row w-full': window.direction === Direction.HORIZONTAL,
+            'flex-col h-full': window.direction === Direction.VERTICAL,
+          },
+        ],
         style: 'flex-grow: 1',
       },
       children,
@@ -38,51 +45,14 @@ const windowStructure = () => {
   if (workspace.value) {
     return renderWindows(workspace.value)
   } else {
-    return h('div', { class: 'background' }, [h('h1', 'Start your journey!')])
+    return h('div', { class: 'bg-background flex justify-center items-center w-full h-full' }, [
+      h('h1', 'Start your journey!'),
+    ])
   }
 }
 </script>
 <template>
-  <div class="workspace">
+  <div class="flex w-full min-h-full max-h-screen">
     <windowStructure />
   </div>
 </template>
-<style lang="scss">
-.workspace {
-  display: flex;
-  width: 100%;
-  min-height: 100%;
-  max-height: 100vh;
-
-  .background {
-    background-color: #333;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    h1 {
-      color: #999;
-      text-align: center;
-    }
-  }
-
-  .window-container {
-    display: flex;
-    min-width: 0;
-    min-height: 0;
-    flex-basis: 0%;
-
-    &--horizontal {
-      flex-direction: row;
-      width: 100%;
-    }
-
-    &--vertical {
-      flex-direction: column;
-      height: 100%;
-    }
-  }
-}
-</style>

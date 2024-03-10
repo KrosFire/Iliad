@@ -13,6 +13,9 @@ export interface SettingsState {
   animations: {
     dragAndDrop: string | null
   }
+  styles: {
+    theme: string | null
+  }
 }
 
 export default SettingsState

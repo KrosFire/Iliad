@@ -12,6 +12,9 @@ export const useSettingsStore = defineStore<Stores.SETTINGS, SettingsState, Sett
       animations: {
         dragAndDrop: null,
       },
+      styles: {
+        theme: null,
+      },
     }),
     getters,
     actions,

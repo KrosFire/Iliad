@@ -6,4 +6,5 @@ export default async () => {
   // TODO: From settingsStore, get get active animation plugin and register it
 
   settingsStore.registerPlugin('DragAndDrop')
+  settingsStore.registerPlugin('IlliadeDark')
 }

@@ -1,0 +1,56 @@
+@font-face {
+  font-family: 'Hind Madurai';
+  src: url('HindMadurai-SemiBold.ttf') format('ttf');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hind Madurai';
+  src: url('HindMadurai-Bold.ttf') format('ttf');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hind Madurai';
+  src: url('HindMadurai-Regular.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hind Madurai';
+  src: url('HindMadurai-Light.ttf') format('ttf');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hind Madurai';
+  src: url('HindMadurai-Medium.ttf') format('ttf');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+html {
+  --color-primary: #393e42;
+  --color-secondary: #fbfbfb;
+  --color-accent: #843179;
+  --color-shadow: rgb(117, 129, 139);
+  --color-selection: #c255b4;
+
+  --color-text: #fbfbfb;
+  --color-background: #393e42;
+
+  --color-success: #4caf50;
+  --color-warning: #ff9800;
+  --color-error: #f44336;
+
+  --font-sans: 'Hind Madurai', sans-serif;
+}

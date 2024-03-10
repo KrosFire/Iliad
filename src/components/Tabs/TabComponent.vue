@@ -28,114 +28,37 @@ const saveFile = () => {
 }
 </script>
 <template>
-  <Draggable>
-    <div :class="{ tab: true, 'tab--active': active, 'tab--removed': isFile && removed }">
-      <div class="tabContent" @click="$emit('click', index)">
-        <span class="fileName">
+  <Draggable class="!flex items-end">
+    <div :class="['box-content', 'min-w-40', 'cursor-pointer', 'transition', 'select-none', 'mx-1', 'h-7']">
+      <div
+        :class="[
+          'flex',
+          'justify-center',
+          'items-center',
+          'bg-secondary',
+          'h-full',
+          'hover:opacity-80',
+          'rounded-tr-md',
+          'rounded-tl-md',
+          'px-6',
+          'relative',
+          { 'border-accent border-t-2 border-l-2 border-r-2': active, 'line-through': removed },
+        ]"
+        @click="$emit('click', index)"
+      >
+        <span class="select-none text-primary">
           {{ title }}
         </span>
-        <button v-show="isFile && !saved" class="saveButton" @click="saveFile">
+        <button v-show="isFile && !saved" class="hover:scale-110 transition px-2" @click="saveFile">
           <font-awesome-icon :icon="faFloppyDisk" />
         </button>
-        <button class="closeIcon" @click.capture="$emit('close', index)">
+        <button
+          class="absolute top-0 bottom-0 right-0 hover:scale-110 transition pr-2"
+          @click.capture="$emit('close', index)"
+        >
           <font-awesome-icon :icon="faCircleXmark" />
         </button>
       </div>
     </div>
   </Draggable>
 </template>
-<style lang="scss" scoped>
-.tab {
-  position: relative;
-  display: flex;
-  min-height: 100%;
-  min-width: 100px;
-  z-index: 0;
-
-  &--active.tab {
-    .tabContent {
-      border-color: purple;
-    }
-  }
-
-  &--removed.tab {
-    text-decoration: line-through;
-  }
-
-  .tabContent {
-    display: flex;
-    justify-content: center;
-    border-top-right-radius: 10px;
-    border-top-left-radius: 10px;
-    -webkit-bordertop-right-radius: 10px;
-    -webkit-bordertop-left-radius: 10px;
-    border-width: 3px 3px 0 3px;
-    border-style: solid;
-    border-color: #fff;
-    background-color: #fff;
-    overflow: hidden;
-    cursor: pointer;
-    position: relative;
-    width: 100%;
-    transition: 0.3s;
-    padding-right: 25px;
-
-    &:hover {
-      background-color: #f0f0f0;
-    }
-
-    .fileName {
-      padding: 0 10px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      user-select: none;
-      -webkit-user-select: none;
-      max-width: 100px;
-    }
-
-    .saveButton {
-      width: 100%;
-      height: 100%;
-      flex: 1;
-      padding: 0 5px;
-      text-decoration: none;
-      text-align: center;
-      overflow: hidden;
-      user-select: none;
-      -webkit-user-select: none;
-      -webkit-user-drag: none;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border: none;
-      cursor: pointer;
-      transition: 0.3s;
-      background: transparent;
-
-      &:hover svg {
-        transform: scale(1.2);
-      }
-    }
-
-    .closeIcon {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      right: 0;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      user-select: none;
-      -webkit-user-select: none;
-      background: transparent;
-      border: none;
-      transition: 0.3s;
-
-      &:hover svg {
-        transform: scale(1.2);
-      }
-    }
-  }
-}
-</style>

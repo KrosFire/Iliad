@@ -1,28 +1,3 @@
-<template>
-  <div
-    v-if="!rename"
-    :class="{
-      file: true,
-      'file--selected': selected,
-    }"
-    :draggable="true"
-    @click.meta.stop.prevent="selectFile('multiple')"
-    @click.shift.stop.prevent="selectFile('mass')"
-    @click.exact.stop.prevent="selectFile('single')"
-    @dragstart="startDrag"
-    @dblclick.prevent="openFile"
-    @click.exact.right="openContextMenu"
-  >
-    <div class="file-icon">
-      <!-- TODO -->
-    </div>
-    <span class="file-name">
-      {{ name }}
-    </span>
-  </div>
-  <input v-else v-model="fileName" type="text" @blur="renameFile" />
-</template>
-
 <script setup lang="ts">
 import getContextMenu from '@/contextMenus/fileContextMenu'
 import { useWorkspaceStore } from '@/stores'
@@ -32,6 +7,7 @@ import { computed, ref } from 'vue'
 const props = defineProps<{
   name: string
   path: string
+  indent?: number
 }>()
 
 const store = useWorkspaceStore()
@@ -77,31 +53,44 @@ const openContextMenu = (e: MouseEvent) => {
   showMenu(getContextMenu(fileNode.value, store))
 }
 </script>
-
-<style lang="scss">
-.file {
-  display: block;
-  color: #fff;
-  text-decoration: none;
-  cursor: pointer;
-  user-select: none;
-  -webkit-user-select: none;
-
-  &--selected {
-    background-color: blue;
-  }
-
-  &:focus {
-    outline: none;
-  }
-
-  &:hover {
-    background: #444;
-  }
-
-  .file-name {
-    user-select: none;
-    -webkit-user-select: none;
-  }
-}
-</style>
+<template>
+  <div
+    v-if="!rename"
+    :class="[
+      'p-1',
+      'select-none',
+      'cursor-pointer',
+      'no-underline',
+      'block',
+      'hover:bg-shadow',
+      {
+        'bg-selection': selected,
+      },
+      'overflow-hidden',
+      'text-ellipsis',
+    ]"
+    :style="indent ? `padding-left: ${indent * 20}px` : ''"
+    :draggable="true"
+    @click.meta.stop.prevent="selectFile('multiple')"
+    @click.shift.stop.prevent="selectFile('mass')"
+    @click.exact.stop.prevent="selectFile('single')"
+    @dragstart="startDrag"
+    @dblclick.prevent="openFile"
+    @click.exact.right="openContextMenu"
+  >
+    <div>
+      <!-- TODO -->
+    </div>
+    <span>
+      {{ name }}
+    </span>
+  </div>
+  <input
+    v-else
+    v-model="fileName"
+    type="text"
+    :class="['p-1', 'block', 'bg-shadow', 'border-accent', 'text-text', 'overflow-hidden', 'text-ellipsis']"
+    :style="indent ? `margin-left: ${indent * 20}px` : ''"
+    @blur="renameFile"
+  />
+</template>

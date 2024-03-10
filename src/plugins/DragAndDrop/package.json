@@ -15,7 +15,7 @@
     "repository": "",
     "homepage": "",
     "marketplace": "",
-    "type": "animation"
+    "type": "dragAndDrop"
   },
   "scripts": {
     "build": "tsc && vite build && cp package.json dist/"

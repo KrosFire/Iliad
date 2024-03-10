@@ -10,6 +10,7 @@ import FileComponent from './FileComponent.vue'
 
 const props = defineProps<{
   path: string
+  indent?: number
 }>()
 
 const store = useWorkspaceStore()
@@ -104,10 +105,20 @@ watch([rename, renameNodeInput], () => {
   <a
     v-if="!rename"
     :href="`folder://${path}`"
-    :class="{
-      folder: true,
-      'folder--selected': selected,
-    }"
+    :class="[
+      'p-1',
+      'select-none',
+      'cursor-pointer',
+      'no-underline',
+      'block',
+      'hover:bg-shadow',
+      'overflow-hidden',
+      'text-ellipsis',
+      {
+        'bg-selection': selected,
+      },
+    ]"
+    :style="indent ? `padding-left: ${indent * 20}px` : ''"
     :draggable="true"
     @dragstart="startDrag"
     @click.meta.stop.left.prevent="selectFolder('multiple')"
@@ -115,55 +126,22 @@ watch([rename, renameNodeInput], () => {
     @click.exact.stop.left.prevent="expandFolder"
     @click.exact.right="openContextMenu"
   >
-    <span class="name">{{ name }}</span>
+    <span>{{ name }}</span>
   </a>
-  <input v-else ref="renameNodeInput" v-model="folderName" type="text" @blur="renameFolder" />
-  <div v-show="fsNode?.open || create" class="indent">
+  <input
+    v-else
+    ref="renameNodeInput"
+    v-model="folderName"
+    type="text"
+    :class="['p-1', 'block', 'bg-shadow', 'border-accent', 'text-text', 'overflow-hidden', 'text-ellipsis']"
+    :style="indent ? `margin-left: ${indent * 20}px` : ''"
+    @blur="renameFolder"
+  />
+  <div v-show="fsNode?.open || create">
     <input v-if="create" ref="createNodeInput" v-model="newNodeName" type="text" @blur="createFsNode" />
     <div v-for="(file, key) in fsNode?.children" :key="key">
-      <FolderComponent v-if="file.__typename === 'FileSystemDirectory'" :path="file.path" />
-      <FileComponent v-else :name="file.name" :path="file.path" />
+      <FolderComponent v-if="file.__typename === 'FileSystemDirectory'" :path="file.path" :indent="(indent ?? 0) + 1" />
+      <FileComponent v-else :name="file.name" :path="file.path" :indent="(indent ?? 0) + 1" />
     </div>
   </div>
 </template>
-<style lang="scss">
-.folder {
-  color: #ddd;
-  padding: 3px;
-  user-select: none;
-  -webkit-user-select: none;
-  cursor: pointer;
-  text-decoration: none;
-  display: block;
-
-  &--selected {
-    background: blue;
-  }
-
-  &:focus {
-    outline: none;
-  }
-
-  &:hover {
-    background: #444;
-  }
-
-  .folder-icon {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    vertical-align: middle;
-    margin-right: 5px;
-  }
-  .name {
-    vertical-align: middle;
-    font-size: 14px;
-  }
-}
-
-.indent {
-  margin-left: 10px;
-  user-select: none;
-  -webkit-user-select: none;
-}
-</style>

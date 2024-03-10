@@ -6,7 +6,6 @@ const props = defineProps<{
   type: Direction
 }>()
 
-const type = ref(props.type)
 const window = ref()
 
 const putInRange = (val: number, minVal: number, maxVal: number): number => {
@@ -52,7 +51,7 @@ const resizeVertically = ({ clientY }: MouseEvent) => {
 const startResize = (e: Event) => {
   e.stopPropagation()
 
-  switch (type.value) {
+  switch (props.type) {
     case Direction.HORIZONTAL:
       document.addEventListener('mousemove', resizeHorizontally)
       break
@@ -83,48 +82,20 @@ const fitToContent = (e: Event) => {
 <template>
   <div
     ref="window"
-    class="resize-window"
-    :class="`resize-window--${type}`"
+    :class="[
+      'flex-grow-0',
+      'z-50',
+      'before:bg-accent',
+      'before:top-0',
+      'before:right-0',
+      'before:absolute',
+      'relative',
+      {
+        'cursor-col-resize h-full w-0 before:h-full before:w-1': type === Direction.HORIZONTAL,
+        'cursor-row-resize h-0 w-full before:w-full before:h-1': type === Direction.VERTICAL,
+      },
+    ]"
     @mousedown="startResize"
     @dblclick="fitToContent"
   />
 </template>
-<style lang="scss" scoped>
-.resize-window {
-  z-index: 999;
-
-  &--horizontal {
-    height: 100%;
-    width: 0;
-    position: relative;
-
-    &:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      cursor: col-resize;
-      height: 100%;
-      width: 8px;
-      background-color: red;
-    }
-  }
-
-  &--vertical {
-    height: 0;
-    width: 100%;
-    position: relative;
-
-    &:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      cursor: row-resize;
-      height: 8px;
-      width: 100%;
-      background-color: red;
-    }
-  }
-}
-</style>

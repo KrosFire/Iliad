@@ -8,6 +8,8 @@ import App from './App.vue'
 import animationsManager from './managers/animations.manager'
 import settingsManager from './managers/settings.manager'
 
+import './index.css'
+
 ace.require('ace-builds/src-noconflict/ext-language_tools')
 ace.config.set('basePath', '/node_modules/ace-builds/src-noconflict/')
 

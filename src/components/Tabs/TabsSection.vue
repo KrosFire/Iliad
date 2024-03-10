@@ -48,7 +48,7 @@ const closeTab = (index: number) => {
 
 <template>
   <Container
-    class="tabs-section"
+    class="bg-background pt-2 !flex !h-11 items-end"
     orientation="horizontal"
     group-name="tabs"
     :get-child-payload="getChildPayload"

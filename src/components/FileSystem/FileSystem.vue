@@ -8,22 +8,9 @@ const store = useWorkspaceStore()
 const path = computed(() => store.fileSystem?.path)
 </script>
 <template>
-  <div class="fs">
+  <div
+    class="min-w-32 bg-background overflow-auto h-screen text-text rounded-tr-md rounded-br-md border-accent border-2"
+  >
     <FolderComponent v-if="path" :path="path" />
   </div>
 </template>
-<style lang="sass" scoped>
-.fs
-  width: 250px
-  background: #333
-  height: 100vh
-  overflow-y: scroll
-  position: relative
-  color: #ddd
-  &::-webkit-scrollbar
-    width: 10px
-  &::-webkit-scrollbar-track
-    background: #333
-  &::-webkit-scrollbar-thumb
-    background: #444
-</style>
