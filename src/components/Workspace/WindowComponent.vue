@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import pages from '@/pages/Pages'
 import { useWorkspaceStore } from '@/stores/workspace'
-import { Pages, TabsWindow } from '~/types'
+import { PAGES, TabsWindow } from '~/types'
 import { computed } from 'vue'
 
 import TabsSection from '../Tabs/TabsSection.vue'
@@ -22,11 +22,11 @@ const view = computed(() => {
     return TextEditor
   }
 
-  return pages[tab.id] ?? pages[Pages.StartingPage]
+  return pages[tab.id] ?? pages[PAGES.STARTING_PAGE]
 })
 </script>
 <template>
-  <div v-if="tabsWindow.tabs.length" class="relative overflow-hidden flex flex-col min-w-0 flex-1" style="flex-grow: 1">
+  <div v-if="tabsWindow.tabs.length" class="relative flex min-w-0 flex-1 flex-col overflow-hidden" style="flex-grow: 1">
     <TabsSection :window-id="windowId" :tabs="tabsWindow.tabs" :active-tab="tabsWindow.active" />
     <DropZones :window-id="windowId">
       <keep-alive>

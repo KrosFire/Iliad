@@ -4,12 +4,13 @@ use tauri::{api::path::home_dir, State, Window};
 
 use crate::errors::Error;
 
-use super::consts::{GlobalState, LocalState, WindowState};
+use super::consts::{GlobalState, SettingsState, WindowState, WorkspaceState};
 
 #[tauri::command]
 pub async fn update_state(
   global_state_mutex: State<'_, Mutex<GlobalState>>,
   window_state_mutex: State<'_, Mutex<WindowState>>,
+  settings_state_mutex: State<'_, Mutex<SettingsState>>,
   window: Window,
   store_type: &str,
   new_state: &str,
@@ -26,18 +27,29 @@ pub async fn update_state(
   }
 
   match store_type {
-    "local" => {
+    "workspace" => {
       let mut window_state = window_state_mutex.lock()?;
 
-      let local_state = window_state.state.get_mut(window.label())
+      let workspace_state = window_state.state.get_mut(window.label())
         .ok_or_else(|| "No local state found for window")?;
 
-      *local_state = serde_json::from_str::<LocalState>(new_state)?;
+      *workspace_state = serde_json::from_str::<WorkspaceState>(new_state)?;
 
       fs::write(
         config_path
           .join("workspace_config.json"),
-        serde_json::to_string(&local_state)?
+        serde_json::to_string(&workspace_state)?
+      )?;
+    }
+    "settings" => {
+      let mut settings_state = settings_state_mutex.lock()?;
+
+      *settings_state = serde_json::from_str::<SettingsState>(new_state)?;
+
+      fs::write(
+        global_config_path
+          .join("settings_config.json"),
+        serde_json::to_string(&settings_state.clone())?
       )?;
     }
     _ => {

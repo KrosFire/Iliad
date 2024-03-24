@@ -1,4 +1,4 @@
-import { ActionWithStore, Direction, DropZone, FileEncodings, Pages, Tab, WorkspaceStore } from '~/types'
+import { ActionWithStore, Direction, DropZone, FileEncodings, PAGES, Tab, WorkspaceStore } from '~/types'
 import { WorkspaceStore as EditorWorkspaceStore } from '~/types/editorStore/workspace'
 import { _ActionsTree } from 'pinia'
 
@@ -21,7 +21,7 @@ type OpenFilesInWindow = (
   position?: DropZone,
   tabIndex?: number,
 ) => Promise<void>
-type OpenPage = (page: Pages, windowId?: string, index?: number) => Promise<void>
+type OpenPage = (page: PAGES, windowId?: string, index?: number) => Promise<void>
 type SaveFile = (fileId: string) => Promise<void>
 type SetActiveTab = (windowId: string, index: number) => Promise<void>
 type SetActiveWindow = (windowId: string) => Promise<void>

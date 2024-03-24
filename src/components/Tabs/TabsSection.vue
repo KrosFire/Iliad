@@ -48,7 +48,7 @@ const closeTab = (index: number) => {
 
 <template>
   <Container
-    class="bg-background pt-2 !flex !h-11 items-end"
+    class="!flex !h-11 items-end overflow-x-auto bg-background pt-2"
     orientation="horizontal"
     group-name="tabs"
     :get-child-payload="getChildPayload"

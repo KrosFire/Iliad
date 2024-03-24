@@ -5,7 +5,7 @@ vi.mock('@tauri-apps/api/path', () => ({
 }))
 
 import { initWorkspaceState } from '@/tests/helpers/initState'
-import { Pages } from '~/types'
+import { PAGES } from '~/types'
 import { createPinia, setActivePinia } from 'pinia'
 
 describe('openPage action', () => {
@@ -30,7 +30,7 @@ describe('openPage action', () => {
       active: 'win1',
     })
 
-    await workspace.openPage(Pages.StartingPage, 'win1')
+    await workspace.openPage(PAGES.STARTING_PAGE, 'win1')
 
     expect(workspace.windows['win1']).toEqual({
       __typename: 'TabsWindow',
@@ -38,7 +38,7 @@ describe('openPage action', () => {
       tabs: [
         {
           __typename: 'PageTab',
-          id: Pages.StartingPage,
+          id: PAGES.STARTING_PAGE,
         },
       ],
       active: 0,
@@ -57,7 +57,7 @@ describe('openPage action', () => {
 
     const createWorkspace = vi.spyOn(workspace, 'createWorkspace')
 
-    await workspace.openPage(Pages.StartingPage)
+    await workspace.openPage(PAGES.STARTING_PAGE)
 
     expect(createWorkspace).toHaveBeenCalledOnce()
   })

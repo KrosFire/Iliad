@@ -1,9 +1,10 @@
-export enum PluginType {
-  ANIMATION = 'animation',
+export enum PLUGIN_TYPES {
+  DRAG_AND_DROP = 'dragAndDrop',
+  THEME = 'theme',
 }
 
 export interface Plugin {
-  type: PluginType
+  type: PLUGIN_TYPES
   name: string
   active: boolean
 }
@@ -11,10 +12,12 @@ export interface Plugin {
 export interface SettingsState {
   plugins: Plugin[]
   animations: {
-    dragAndDrop: string | null
+    dragAndDrop: string
   }
   styles: {
-    theme: string | null
+    theme: string
+    tabSize: number
+    fontSize: number
   }
 }
 

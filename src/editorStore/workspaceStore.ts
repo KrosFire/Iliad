@@ -8,7 +8,7 @@ import Store from './store'
 
 /**
  * EditorWorkspaceStore
- * Requires `init` to be called before using the store
+ * @requires Requires `init` to be called before using the store
  */
 class EditorWorkspaceStore {
   private store: Store<WorkspaceStore>
@@ -19,7 +19,7 @@ class EditorWorkspaceStore {
 
     this.store = new Store<WorkspaceStore>({
       schema,
-      name: 'local',
+      name: 'workspace',
     })
 
     localWorkspaceStore.$onAction(({ after, store }) => {

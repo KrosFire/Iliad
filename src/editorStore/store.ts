@@ -1,12 +1,12 @@
 import getState from '@/api/getState'
 import updateState from '@/api/updateState'
+import { StoreName } from '~/types'
 import { GlobalStore } from '~/types/editorStore/global'
+import { SettingsStore } from '~/types/editorStore/settings'
 import { WorkspaceStore } from '~/types/editorStore/workspace'
 import { ZodDefault, ZodType } from 'zod'
 
-type StoreName = 'global' | 'local'
-
-type Stores = GlobalStore | WorkspaceStore
+type Stores = GlobalStore | WorkspaceStore | SettingsStore
 
 type Config<T extends Stores> = {
   schema: ZodDefault<ZodType<T>>

@@ -1,5 +1,5 @@
 import { initWorkspaceState } from '@/tests/helpers/initState'
-import { Direction } from '~/types'
+import { Direction, PAGES } from '~/types'
 import { createPinia, setActivePinia } from 'pinia'
 
 describe('closeTab action', () => {
@@ -125,7 +125,7 @@ describe('closeTab action', () => {
           tabs: [
             { __typename: 'FileTab', id: 'file2' },
             { __typename: 'FileTab', id: 'file3' },
-            { __typename: 'PageTab', id: 'home' },
+            { __typename: 'PageTab', id: PAGES.STARTING_PAGE },
           ],
         },
       },

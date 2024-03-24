@@ -3,11 +3,12 @@
 
 use std::{fs, path::PathBuf, sync::Mutex};
 
-use commands::state::consts::{GlobalState, LocalState, WindowState};
+use commands::state::consts::{GlobalState, WorkspaceState, WindowState, SettingsState};
 use tauri::{api::path::home_dir, Manager};
 
 mod commands;
 mod errors;
+mod menu;
 
 fn main() {    
     tauri::Builder::default()
@@ -32,7 +33,7 @@ fn main() {
                 state: global_state.lastWorkspacePaths
                     .iter()
                     .map(|path| {
-                        let local_state = serde_json::from_str::<LocalState>(
+                        let local_state = serde_json::from_str::<WorkspaceState>(
                             &fs::read_to_string(
                                 PathBuf::from(path)
                                         .join(".illiade")
@@ -40,7 +41,7 @@ fn main() {
                                 )
                                 .unwrap_or(String::new())
                             )
-                            .unwrap_or(LocalState::default());
+                            .unwrap_or(WorkspaceState::default());
 
                         (path.clone(), local_state)
                     })
@@ -60,10 +61,25 @@ fn main() {
                     .unwrap();
                 });
 
+            handle.manage(Mutex::new(
+                serde_json::from_str::<SettingsState>(
+                    &fs::read_to_string(
+                        home_dir()
+                            .unwrap()
+                            .join(".illiade")
+                            .join("settings_config.json")
+                    )
+                    .unwrap_or(String::new())
+                )
+                .unwrap_or(SettingsState::default())
+            ));
+
             Ok(())
         })
         .plugin(tauri_plugin_fs_watch::init())
         .plugin(tauri_plugin_context_menu::init())
+        .menu(menu::init())
+        .on_menu_event(menu::menu_event_handler)
         .invoke_handler(tauri::generate_handler![
             commands::read_dir::read_dir,
             commands::read_file::read_file,

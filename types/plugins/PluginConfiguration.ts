@@ -1,4 +1,4 @@
-import { PluginType } from '../store'
+import { PLUGIN_TYPES } from '../store'
 
 export interface PluginIlliadeOptions {
   title: string
@@ -9,7 +9,7 @@ export interface PluginIlliadeOptions {
   repository: string
   homepage: string
   marketplace: string
-  type: PluginType
+  type: PLUGIN_TYPES
 }
 
 export interface PluginConfiguration {

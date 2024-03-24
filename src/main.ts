@@ -6,6 +6,7 @@ import { createApp } from 'vue'
 import closeWindow from './api/closeWindow'
 import App from './App.vue'
 import animationsManager from './managers/animations.manager'
+import menuManager from './managers/menu.manager'
 import settingsManager from './managers/settings.manager'
 
 import './index.css'
@@ -29,5 +30,6 @@ app.use(createPinia())
 
 settingsManager()
 animationsManager()
+menuManager()
 
 app.mount('#app')

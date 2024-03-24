@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useSettingsStore } from '@/stores'
 import { useWorkspaceStore } from '@/stores/workspace'
 import { TabsWindow } from '~/types'
 import { computed, ref, watch } from 'vue'
@@ -10,6 +11,7 @@ const props = defineProps<{
 }>()
 
 const store = useWorkspaceStore()
+const settings = useSettingsStore()
 const tabId = ref<string>(props.id)
 
 const tab = computed(
@@ -54,7 +56,8 @@ const updateValue = async (value: string) => {
     theme="twilight"
     :lang="file.lang ? file.lang.toLowerCase() : undefined"
     :options="{
-      tabSize: 2,
+      tabSize: settings.styles.tabSize ?? 2,
+      useSoftTabs: true,
       highlightActiveLine: true,
       useWorker: true,
       enableBasicAutocompletion: true,
@@ -62,7 +65,7 @@ const updateValue = async (value: string) => {
       enableLiveAutocompletion: true,
     }"
     :style="{
-      'font-size': '18px',
+      'font-size': `${settings.styles.fontSize}px`,
     }"
     @keydown.ctrl.s="save"
     @keydown.meta.s="save"

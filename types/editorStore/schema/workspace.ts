@@ -1,4 +1,4 @@
-import { Direction, FileEncodings, KnownLanguages } from '~/types'
+import { Direction, FileEncodings, KnownLanguages, PAGES } from '~/types'
 import { z } from 'zod'
 
 import { OpenedDirectory, WorkspaceStore } from '../workspace'
@@ -30,27 +30,41 @@ const schema: z.ZodDefault<z.ZodType<WorkspaceStore>> = z
     ),
     windows: z.record(
       z.string(),
-      z.discriminatedUnion('__typename', [
-        z.object({
-          __typename: z.literal('ContainerWindow'),
-          id: z.string(),
-          children: z.array(z.string()),
-          parent: z.string().nullable(),
-          direction: z.nativeEnum(Direction),
-        }),
-        z.object({
-          __typename: z.literal('TabsWindow'),
-          id: z.string(),
-          tabs: z.array(
-            z.object({
-              __typename: z.enum(['FileTab', 'PageTab']),
-              id: z.string(),
-            }),
-          ),
-          parent: z.string().nullable(),
-          active: z.number(),
-        }),
-      ]),
+      z
+        .discriminatedUnion('__typename', [
+          z.object({
+            __typename: z.literal('ContainerWindow'),
+            id: z.string(),
+            children: z.array(z.string()),
+            parent: z.string().nullable(),
+            direction: z.nativeEnum(Direction),
+          }),
+          z.object({
+            __typename: z.literal('TabsWindow'),
+            id: z.string(),
+            tabs: z.array(
+              z.discriminatedUnion('__typename', [
+                z.object({
+                  __typename: z.literal('FileTab'),
+                  id: z.string(),
+                }),
+                z.object({
+                  __typename: z.literal('PageTab'),
+                  id: z.nativeEnum(PAGES),
+                }),
+              ]),
+            ),
+            parent: z.string().nullable(),
+            active: z.number().min(0),
+          }),
+        ])
+        .refine(window => {
+          if (window.__typename === 'ContainerWindow') {
+            return true
+          }
+
+          return window.tabs.length > window.active
+        }, 'Active tab index is out of bounds'),
     ),
     active: z.string().nullable(),
     fileSystem: fileSystemSchema.nullable(),

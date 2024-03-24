@@ -112,7 +112,7 @@ pub enum Window {
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 #[allow(non_snake_case)]
-pub struct LocalState {
+pub struct WorkspaceState {
   pub workspace: Nullable<String>,
   pub files: HashMap<String, File>,
   pub windows: HashMap<String, Window>,
@@ -122,7 +122,7 @@ pub struct LocalState {
   pub lastSelectedFsNode: Nullable<String>,
 }
 
-impl Default for LocalState {
+impl Default for WorkspaceState {
   fn default() -> Self {
     Self {
       workspace: None,
@@ -138,5 +138,28 @@ impl Default for LocalState {
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct WindowState {
-  pub state: HashMap<String, LocalState>,
+  pub state: HashMap<String, WorkspaceState>,
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone)]
+#[serde(untagged)]
+enum SettingsValue {
+  String(String),
+  Number(f64),
+  Boolean(bool),
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone)]
+pub struct SettingsState {
+  animations: HashMap<String, String>,
+  styles: HashMap<String, SettingsValue>,
+}
+
+impl Default for SettingsState {
+  fn default() -> Self {
+    Self {
+      animations: HashMap::new(),
+      styles: HashMap::new(),
+    }
+  } 
 }

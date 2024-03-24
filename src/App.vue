@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import FileSystem from '@/components/FileSystem/FileSystem.vue'
 import Workspace from '@/components/Workspace/WorkspaceComponent.vue'
-import { useWorkspaceStore } from '@/stores'
+import { useSettingsStore, useWorkspaceStore } from '@/stores'
 import { onBeforeMount } from 'vue'
 
+import EditorSettingsStore from './editorStore/settingsStore'
 import EditorWorkspaceStore from './editorStore/workspaceStore'
 
 const props = defineProps<{
@@ -11,8 +12,19 @@ const props = defineProps<{
 }>()
 
 const workspaceStore = useWorkspaceStore()
+const settingsStore = useSettingsStore()
 
 onBeforeMount(async () => {
+  const editorSettingsStore = new EditorSettingsStore(settingsStore)
+
+  await editorSettingsStore.init()
+
+  const settingsState = editorSettingsStore.getSettingsState()
+
+  if (settingsState) {
+    settingsStore.initState(settingsState)
+  }
+
   const editorWorkspaceStore = new EditorWorkspaceStore(
     workspaceStore.fileSystem?.path || props.workspacePath!,
     workspaceStore,
@@ -33,7 +45,7 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div class="flex flex-nowrap h-screen bg-background">
+  <div class="flex h-screen flex-nowrap bg-background">
     <FileSystem />
     <Workspace />
   </div>

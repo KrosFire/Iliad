@@ -27,6 +27,9 @@ const renderWindows = (windowId: string): any => {
       {
         class: [
           'flex',
+          'flex-1',
+          'min-w-0',
+          'min-h-0',
           {
             'flex-row w-full': window.direction === Direction.HORIZONTAL,
             'flex-col h-full': window.direction === Direction.VERTICAL,
@@ -52,7 +55,7 @@ const windowStructure = () => {
 }
 </script>
 <template>
-  <div class="flex w-full min-h-full max-h-screen">
+  <div class="flex max-h-screen min-h-full w-full">
     <windowStructure />
   </div>
 </template>

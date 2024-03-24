@@ -22,11 +22,13 @@ const registerPlugin: SettingsActions['registerPlugin'] = async function (plugin
         this.animations.dragAndDrop = illiade.title
         break
       }
-      case 'styles': {
+      case 'theme': {
         const currentTheme = this.styles.theme
 
-        if (currentTheme) {
-          document.head.removeChild(document.getElementById(currentTheme) as HTMLLinkElement)
+        const themeLink = document.getElementById(currentTheme) as HTMLLinkElement
+
+        if (currentTheme && themeLink) {
+          document.head.removeChild(themeLink)
         }
 
         this.styles.theme = illiade.title

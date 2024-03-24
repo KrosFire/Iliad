@@ -42,18 +42,18 @@ const saveFile = () => {
           'rounded-tl-md',
           'px-6',
           'relative',
-          { 'border-accent border-t-2 border-l-2 border-r-2': active, 'line-through': removed },
+          { 'border-l-2 border-r-2 border-t-2 border-accent': active, 'line-through': removed },
         ]"
         @click="$emit('click', index)"
       >
         <span class="select-none text-primary">
           {{ title }}
         </span>
-        <button v-show="isFile && !saved" class="hover:scale-110 transition px-2" @click="saveFile">
+        <button v-show="isFile && !saved" class="px-2 transition hover:scale-110" @click="saveFile">
           <font-awesome-icon :icon="faFloppyDisk" />
         </button>
         <button
-          class="absolute top-0 bottom-0 right-0 hover:scale-110 transition pr-2"
+          class="absolute bottom-0 right-0 top-0 pr-2 transition hover:scale-110"
           @click.capture="$emit('close', index)"
         >
           <font-awesome-icon :icon="faCircleXmark" />

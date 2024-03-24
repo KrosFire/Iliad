@@ -1,6 +1,9 @@
 import { FileEncodings } from '..'
 import { GlobalStore } from '../editorStore/global'
+import { SettingsStore } from '../editorStore/settings'
 import { WorkspaceStore } from '../editorStore/workspace'
+
+export type StoreName = 'global' | 'workspace' | 'settings'
 
 export interface Commands {
   read_dir: {
@@ -105,26 +108,24 @@ export interface Commands {
       }
     | {
         arguments: {
-          storeType: 'local'
+          storeType: 'workspace'
         }
         return: WorkspaceStore
       }
+    | {
+        arguments: {
+          storeType: 'settings'
+        }
+        return: SettingsStore
+      }
 
-  update_state:
-    | {
-        arguments: {
-          storeType: 'global'
-          newState: string
-        }
-        return: void
-      }
-    | {
-        arguments: {
-          storeType: 'local'
-          newState: string
-        }
-        return: void
-      }
+  update_state: {
+    arguments: {
+      storeType: StoreName
+      newState: string
+    }
+    return: void
+  }
 }
 
 export interface ReadDirItem {

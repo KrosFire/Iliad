@@ -10,10 +10,12 @@ export const useSettingsStore = defineStore<Stores.SETTINGS, SettingsState, Sett
     state: () => ({
       plugins: [],
       animations: {
-        dragAndDrop: null,
+        dragAndDrop: 'DragAndDrop',
       },
       styles: {
-        theme: null,
+        theme: 'IlliadeDark',
+        tabSize: 4,
+        fontSize: 14,
       },
     }),
     getters,
