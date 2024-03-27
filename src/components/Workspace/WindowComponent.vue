@@ -24,9 +24,18 @@ const view = computed(() => {
 
   return pages[tab.id] ?? pages[PAGES.STARTING_PAGE]
 })
+
+const setActiveWindow = () => {
+  store.setActiveWindow(props.windowId)
+}
 </script>
 <template>
-  <div v-if="tabsWindow.tabs.length" class="relative flex min-w-0 flex-1 flex-col overflow-hidden" style="flex-grow: 1">
+  <div
+    v-if="tabsWindow.tabs.length"
+    class="relative flex min-w-0 flex-1 flex-col overflow-hidden"
+    style="flex-grow: 1"
+    @focusin="setActiveWindow"
+  >
     <TabsSection :window-id="windowId" :tabs="tabsWindow.tabs" :active-tab="tabsWindow.active" />
     <DropZones :window-id="windowId">
       <keep-alive>
