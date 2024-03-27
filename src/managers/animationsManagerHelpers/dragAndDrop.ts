@@ -1,6 +1,8 @@
+import readFile from '@/api/readFile'
 import logger from '@/utils/logger'
 import { listen } from '@tauri-apps/api/event'
-import { AnimationsStore, SettingsStore } from '~/types'
+import { resolveResource } from '@tauri-apps/api/path'
+import { AnimationsStore, FileEncodings, SettingsStore } from '~/types'
 import { v4 as uuid } from 'uuid'
 
 class DropEvent extends DragEvent {
@@ -83,27 +85,37 @@ const startListeningForDragAndDropEvents = (animationsStore: AnimationsStore) =>
   })
 }
 
+const startPlugin = async (activePluginName?: string) => {
+  if (!activePluginName) {
+    return
+  }
+
+  const pluginPath = await resolveResource(`../src/plugins/${activePluginName}/dist/index.js`)
+
+  const code = await readFile(pluginPath, FileEncodings.UTF8)
+
+  const codeBlob = new Blob([code], { type: 'application/javascript' })
+
+  const blobUrl = URL.createObjectURL(codeBlob)
+
+  return new Worker(blobUrl)
+}
+
 export default async (animationsStore: AnimationsStore, settingsStore: SettingsStore) => {
   let activePlugin = settingsStore.getDragAndDropPlugin
 
-  let pluginThread: Worker | undefined
-
-  let pluginPath = activePlugin ? `../../plugins/${activePlugin.name}/dist/index.js` : ''
-
-  if (activePlugin) {
-    pluginThread = new Worker(new URL(pluginPath, import.meta.url))
-  }
+  let pluginThread = await startPlugin(activePlugin?.name)
 
   settingsStore.$subscribe(async () => {
-    if (settingsStore.getDragAndDropPlugin !== activePlugin) {
-      activePlugin = settingsStore.getDragAndDropPlugin
-
-      if (!activePlugin) return
-
-      pluginPath = `../../plugins/${activePlugin.name}/dist/index.js`
-
-      pluginThread = new Worker(new URL(pluginPath, import.meta.url))
+    if (settingsStore.getDragAndDropPlugin === activePlugin) {
+      return
     }
+
+    activePlugin = settingsStore.getDragAndDropPlugin
+
+    pluginThread?.terminate()
+
+    pluginThread = await startPlugin(activePlugin?.name)
   })
 
   startListeningForDragAndDropEvents(animationsStore)

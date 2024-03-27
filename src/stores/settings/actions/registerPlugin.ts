@@ -1,15 +1,19 @@
+import readFile from '@/api/readFile'
 import logger from '@/utils/logger'
-import { SettingsActions } from '~/types'
+import { resolveResource } from '@tauri-apps/api/path'
+import { FileEncodings, SettingsActions } from '~/types'
 
 const registerPlugin: SettingsActions['registerPlugin'] = async function (pluginName) {
-  const config = await import(`../../../plugins/${pluginName}/package.json`)
+  const configPath = await resolveResource(`../src/plugins/${pluginName}/package.json`)
+
+  const config = await readFile(configPath, FileEncodings.UTF8)
 
   if (!config) {
     return logger.error(`[registerPlugin] Failed to register a plugin. Cannot find package.json file in ${pluginName}`)
   }
 
   try {
-    const { illiade } = config
+    const { illiade } = JSON.parse(config)
 
     this.plugins.push({
       type: illiade.type,
@@ -33,11 +37,16 @@ const registerPlugin: SettingsActions['registerPlugin'] = async function (plugin
 
         this.styles.theme = illiade.title
 
-        const link = document.createElement('link')
-        link.id = illiade.title
-        link.rel = 'stylesheet'
-        link.href = new URL(`../../../plugins/${pluginName}/index.css`, import.meta.url).toString()
-        document.head.appendChild(link)
+        const filePath = await resolveResource(`../src/plugins/${pluginName}/index.css`)
+
+        const stylesTag = document.createElement('style')
+        stylesTag.id = illiade.title
+        stylesTag.type = 'text/css'
+
+        const styles = await readFile(filePath, FileEncodings.UTF8)
+
+        stylesTag.innerHTML = styles
+        document.head.appendChild(stylesTag)
         break
       }
       default: {
