@@ -1,78 +1,23 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::{fs, path::PathBuf, sync::Mutex};
-
-use commands::state::consts::{GlobalState, WorkspaceState, WindowState, SettingsState};
-use tauri::{api::path::home_dir, Manager};
+use cli::handle_cli;
+use gui::handle_gui;
 
 mod commands;
 mod errors;
 mod menu;
+mod cli;
+mod gui;
 
 fn main() {    
     tauri::Builder::default()
         .setup(|app| {
-            let handle = app.handle();
-
-            let global_state_saved = fs::read_to_string(
-                home_dir()
-                        .unwrap()
-                        .join(".illiade")
-                        .join("global_config.json")
-                    )
-                    .unwrap_or(String::new());
-
-            handle.manage(Mutex::new(serde_json::from_str::<GlobalState>(&global_state_saved)
-                .unwrap_or_default()));
-        
-            let global_state = serde_json::from_str::<GlobalState>(&global_state_saved)
-                .unwrap_or_default();
-
-            handle.manage(Mutex::new(WindowState {
-                state: global_state.lastWorkspacePaths
-                    .iter()
-                    .map(|path| {
-                        let local_state = serde_json::from_str::<WorkspaceState>(
-                            &fs::read_to_string(
-                                PathBuf::from(path)
-                                        .join(".illiade")
-                                        .join("workspace_config.json")
-                                )
-                                .unwrap_or(String::new())
-                            )
-                            .unwrap_or(WorkspaceState::default());
-
-                        (path.clone(), local_state)
-                    })
-                    .collect()
-            }));
-
-            global_state.lastWorkspacePaths
-                .iter()
-                .for_each(|path| {
-                    tauri::WindowBuilder::new(
-                        &handle,
-                        path.clone(), /* the unique window label */
-                        tauri::WindowUrl::App("index.html".into()),
-                    )
-                    .title(path.clone().split('/').last().unwrap())
-                    .build()
-                    .unwrap();
-                });
-
-            handle.manage(Mutex::new(
-                serde_json::from_str::<SettingsState>(
-                    &fs::read_to_string(
-                        home_dir()
-                            .unwrap()
-                            .join(".illiade")
-                            .join("settings_config.json")
-                    )
-                    .unwrap_or(String::new())
-                )
-                .unwrap_or(SettingsState::default())
-            ));
+            if std::env::args_os().count() > 1 {
+                handle_cli(app)?;
+            } else {
+                handle_gui(app)?;
+            }
 
             Ok(())
         })

@@ -35,31 +35,58 @@ pub async fn update_state(
 
       *workspace_state = serde_json::from_str::<WorkspaceState>(new_state)?;
 
-      fs::write(
-        config_path
-          .join("workspace_config.json"),
-        serde_json::to_string(&workspace_state)?
-      )?;
+      save_state("workspace", new_state, window.label())?;
     }
     "settings" => {
       let mut settings_state = settings_state_mutex.lock()?;
 
       *settings_state = serde_json::from_str::<SettingsState>(new_state)?;
 
-      fs::write(
-        global_config_path
-          .join("settings_config.json"),
-        serde_json::to_string(&settings_state.clone())?
-      )?;
+      save_state("settings", new_state, window.label())?;
     }
     _ => {
       let mut global_state = global_state_mutex.lock()?;
 
       *global_state = serde_json::from_str::<GlobalState>(new_state)?;
 
+      save_state("global", new_state, window.label())?;
+    }
+  }
+
+  Ok(())
+}
+
+pub fn save_state(state_type: &str, state: &str, local_path: &str) -> Result<(), Error> {
+  let config_path: PathBuf = PathBuf::from(local_path).join(".illiade");
+  let global_config_path: PathBuf = home_dir().unwrap().join(".illiade");
+
+  if !config_path.exists() {
+    fs::create_dir_all(config_path.clone())?;
+  }
+
+  if !global_config_path.exists() {
+    fs::create_dir_all(global_config_path.clone())?;
+  }
+
+  match state_type {
+    "workspace" => {
+      fs::write(
+        config_path
+          .join("workspace_config.json"),
+        state
+      )?;
+    }
+    "settings" => {
+      fs::write(
+        global_config_path
+          .join("settings_config.json"),
+        state,
+      )?;
+    }
+    _ => {
       fs::write(
         global_config_path.join("global_config.json"),
-        serde_json::to_string(&global_state.clone())?
+        state
       )?;
     }
   }

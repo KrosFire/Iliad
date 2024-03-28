@@ -30,11 +30,22 @@
       "targets": "all",
       "identifier": "com.illiade.app",
       "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
-      "resources": ["../src/plugins/*"]
+      "resources": ["../src/plugins/*"],
+      "category": "DeveloperTool"
     },
     "security": {
       "csp": null
     },
-    "windows": []
+    "cli": {
+      "description": "Illiade code editor CLI",
+      "args": [
+        {
+          "name": "open",
+          "short": "o",
+          "takesValue": true,
+          "description": "Opens Illiade in provided directory"
+        }
+      ]
+    }
   }
 }
