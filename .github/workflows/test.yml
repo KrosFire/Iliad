@@ -7,11 +7,11 @@ on:
       - completed
 
 jobs:
+  install:
+    uses: ./.github/workflows/install.yml
   test:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: ./.github/workflows/install.yml
-
       - name: Test
         run: npm run test

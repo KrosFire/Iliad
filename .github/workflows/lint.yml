@@ -1,20 +1,16 @@
 name: Lint
 
 on:
-  workflow_run:
-    workflows: ["Install dependencies"]
-    types:
-      - completed
+  - push
+  - pull_request
 
 jobs:
+  install:
+    uses: ./.github/workflows/install.yml
   lint:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: ./.github/workflows/install.yml
-
       - name: Lint
         run: npm run lint
  
- 
-

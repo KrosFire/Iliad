@@ -1,9 +1,5 @@
 name: Install dependencies
 
-on:
-  - push
-  - pull_request
-
 jobs:
   cache-and-install:
     runs-on: ubuntu-latest
