@@ -5,12 +5,17 @@ on:
   - pull_request
 
 jobs:
-  install:
-    uses: ./.github/workflows/install.yml
   lint:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - uses: wyvox/action-setup-pnpm@v3
+        with:
+          node-version: 16
+
       - name: Lint
         run: npm run lint
  

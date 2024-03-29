@@ -21,8 +21,6 @@ on:
         default: false
 
 jobs:
-  install:
-    uses: ./.github/workflows/install.yml
   release:
     permissions:
       contents: write
@@ -50,6 +48,10 @@ jobs:
         uses: swatinem/rust-cache@v2
         with:
           workspaces: './src-tauri -> target'
+      
+      - uses: wyvox/action-setup-pnpm@v3
+        with:
+          node-version: 16
 
       - name: Build the app
         uses: tauri-apps/tauri-action@v0
