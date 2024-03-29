@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { resolveAceResource } from '@/aceImports'
 import { useSettingsStore } from '@/stores'
 import { useWorkspaceStore } from '@/stores/workspace'
 import { TabsWindow } from '~/types'
-import { computed, ref, watch } from 'vue'
+import { computed, onBeforeMount, ref, watch } from 'vue'
 import { VAceEditor } from 'vue3-ace-editor'
 
 const props = defineProps<{
@@ -13,6 +14,7 @@ const props = defineProps<{
 const store = useWorkspaceStore()
 const settings = useSettingsStore()
 const tabId = ref<string>(props.id)
+const loaded = ref(false)
 
 const tab = computed(
   () => (store.windows[props.windowId] as TabsWindow)?.tabs.filter(({ id }) => id === props.id) || [],
@@ -20,8 +22,11 @@ const tab = computed(
 
 watch(
   () => props.id,
-  () => {
+  async () => {
+    loaded.value = false
     tabId.value = props.id
+
+    await fetchResources()
   },
 )
 
@@ -40,6 +45,18 @@ watch(
 
 const file = computed(() => store.files[tabId.value])
 
+const fetchResources = async () => {
+  if (file.value.lang) {
+    await resolveAceResource(file.value.lang, 'mode')
+  }
+
+  await resolveAceResource('twilight', 'theme')
+
+  loaded.value = true
+}
+
+onBeforeMount(fetchResources)
+
 const save = async () => {
   store.saveFile(tabId.value)
 }
@@ -50,7 +67,7 @@ const updateValue = async (value: string) => {
 </script>
 <template>
   <v-ace-editor
-    v-if="file"
+    v-if="file && loaded"
     :value="file.editorContent"
     class="editorBody"
     theme="twilight"
