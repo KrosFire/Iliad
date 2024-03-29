@@ -1,5 +1,8 @@
 name: Install dependencies
 
+on:
+  workflow_call:
+
 jobs:
   cache-and-install:
     runs-on: ubuntu-latest
