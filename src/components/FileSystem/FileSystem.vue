@@ -9,7 +9,7 @@ const path = computed(() => store.fileSystem?.path)
 </script>
 <template>
   <div
-    class="min-w-32 bg-background overflow-auto h-screen text-text rounded-tr-md rounded-br-md border-accent border-2"
+    class="h-screen min-w-32 overflow-auto rounded-br-md rounded-tr-md border-2 border-accent bg-background text-text"
   >
     <FolderComponent v-if="path" :path="path" />
   </div>

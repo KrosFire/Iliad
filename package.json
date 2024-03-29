@@ -10,10 +10,12 @@
     "tauri": "tauri",
     "lint": "eslint --ignore-path .eslintignore --ext .js,.ts,.vue .",
     "lint:fix": "pnpm lint --fix",
-    "format": "prettier --cache --log-level warn --ignore-path .gitignore --write \"src/**/*.+(js|ts|json|vue)\"",
+    "format": "prettier --cache --log-level warn --ignore-path .gitignore -c \"src/**/*.+(js|ts|json|vue)\"",
+    "format:fix": "prettier --cache --log-level warn --ignore-path .gitignore -w \"src/**/*.+(js|ts|json|vue)\"",
     "test": "vitest --config src/tests/vitest.config.mts",
     "test-ui": "vitest --config src/tests/vitest.config.mts --ui --coverage.enabled=true",
-    "coverage": "vitest --config src/tests/vitest.config.mts --coverage"
+    "coverage": "vitest --config src/tests/vitest.config.mts --coverage",
+    "prepare": "husky"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
@@ -44,6 +46,7 @@
     "eslint-plugin-prettier": "^5.1.3",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "eslint-plugin-vue": "^9.20.1",
+    "husky": "^9.0.11",
     "jsdom": "^24.0.0",
     "postcss": "^8.4.35",
     "prettier": "^3.2.4",

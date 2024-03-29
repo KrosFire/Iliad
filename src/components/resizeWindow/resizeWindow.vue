@@ -91,8 +91,8 @@ const fitToContent = (e: Event) => {
       'before:absolute',
       'relative',
       {
-        'cursor-col-resize h-full w-0 before:h-full before:w-1': type === Direction.HORIZONTAL,
-        'cursor-row-resize h-0 w-full before:w-full before:h-1': type === Direction.VERTICAL,
+        'h-full w-0 cursor-col-resize before:h-full before:w-1': type === Direction.HORIZONTAL,
+        'h-0 w-full cursor-row-resize before:h-1 before:w-full': type === Direction.VERTICAL,
       },
     ]"
     @mousedown="startResize"

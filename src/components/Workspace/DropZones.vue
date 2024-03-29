@@ -69,11 +69,11 @@ const handleDrop = async (e: DragEvent) => {
 }
 </script>
 <template>
-  <div class="relative w-full h-full">
+  <div class="relative h-full w-full">
     <canvas
       v-if="isDragAndDropAnimationActive"
       ref="canvas"
-      class="z-50 absolute top-0 left-0 w-full h-full"
+      class="absolute left-0 top-0 z-50 h-full w-full"
       dropzone="move"
       @dragenter.prevent=""
       @dragleave.prevent=""
