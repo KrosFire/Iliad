@@ -55,10 +55,7 @@ jobs:
           node-version: 'lts/*'
           cache: 'pnpm'
 
-      - name: Get node modules
-        uses: actions/download-artifact@v2
-        with:
-          name: node_modules
+      - uses: ./.github/workflows/install.yml
 
       - name: Build the app
         uses: tauri-apps/tauri-action@v0
