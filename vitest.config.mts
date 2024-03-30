@@ -1,6 +1,12 @@
 /// <reference types="vitest" />
 import vue from '@vitejs/plugin-vue'
+import path from 'path'
 import { defineConfig } from 'vite'
+
+console.log('aliases', {
+  '@': path.resolve(__dirname, './src'),
+  '~': path.resolve(__dirname, './'),
+})
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -9,8 +15,8 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     alias: {
-      '@/': '/src/',
-      '~/': `/`,
+      '@': path.resolve(__dirname, './src'),
+      '~': path.resolve(__dirname, './'),
     },
     coverage: {
       provider: 'istanbul',
