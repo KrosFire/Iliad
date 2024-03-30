@@ -6,8 +6,8 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   resolve: {
     alias: {
-      '@/': `/src/`,
-      '~/': `/`,
+      '@/': new URL('../', import.meta.url).pathname,
+      '~/': new URL('../../', import.meta.url).pathname,
     },
   },
   plugins: [vue()],
