@@ -18,8 +18,8 @@ jobs:
           pnpm-version: 7.9.4
 
       - name: Lint
-        run: npm run lint
+        run: pnpm lint
 
       - name: Format
-        run: npm run format
+        run: pnpm format
  

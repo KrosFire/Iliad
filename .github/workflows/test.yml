@@ -20,4 +20,4 @@ jobs:
           pnpm-version: 7.9.4
 
       - name: Test
-        run: npm run test
+        run: pnpm test
