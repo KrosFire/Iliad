@@ -1,10 +1,10 @@
 [package]
 name = "illiade"
 version = "0.0.0"
-description = "A Tauri App"
+description = "Illiade IDE"
 authors = ["Hubert Jabłoński"]
-license = ""
-repository = ""
+license = "MIT"
+repository = "https://github.com/KrosFire/Illiade"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -13,7 +13,7 @@ edition = "2021"
 tauri-build = { version = "1.5", features = [] }
 
 [dependencies]
-tauri = { version = "1.5", features = [ "cli", "clipboard-write-text", "path-all", "shell-open", "devtools"] }
+tauri = { version = "1.5", features = [ "cli", "clipboard-write-text", "path-all", "shell-open"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 tauri-plugin-fs-watch = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
