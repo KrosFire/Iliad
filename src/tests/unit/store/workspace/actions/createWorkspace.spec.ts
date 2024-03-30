@@ -51,7 +51,7 @@ describe('createWorkspaceAction', () => {
       [id]: {
         __typename: 'TabsWindow',
         id,
-        tabs: [{ __typename: 'PageTab', id: 'Home' }],
+        tabs: [{ __typename: 'PageTab', id: 'StartingPage' }],
         active: 0,
         parent: null,
       },

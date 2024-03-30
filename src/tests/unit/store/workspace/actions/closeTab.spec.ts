@@ -150,7 +150,7 @@ describe('closeTab action', () => {
         tabs: [
           { __typename: 'FileTab', id: 'file2' },
           { __typename: 'FileTab', id: 'file3' },
-          { __typename: 'PageTab', id: 'home' },
+          { __typename: 'PageTab', id: 'StartingPage' },
         ],
       },
     })

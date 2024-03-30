@@ -25,9 +25,12 @@ describe('changeTabs action', () => {
       },
     })
 
+    store.closeWindow = vi.fn()
+
     store.changeTabs('main', [])
 
-    expect(store.windows.main).not.toBeDefined()
+    expect(store.closeWindow).toHaveBeenCalledOnce()
+    expect(store.closeWindow).toHaveBeenCalledWith('main')
   })
 
   it('Should decrease active tab index', () => {

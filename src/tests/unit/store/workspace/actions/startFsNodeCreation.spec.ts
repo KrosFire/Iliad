@@ -17,6 +17,8 @@ describe('startFsNodeCreation action', () => {
       },
     } as WorkspaceState)
 
+    store.openDirectory = vi.fn()
+
     await store.startFsNodeCreation('/', 'dir')
 
     expect(store.fileSystem?.create).toBe('dir')
@@ -30,6 +32,8 @@ describe('startFsNodeCreation action', () => {
         create: 'dir',
       },
     } as WorkspaceState)
+
+    store.openDirectory = vi.fn()
 
     await store.startFsNodeCreation('/', 'file')
 
