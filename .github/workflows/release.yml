@@ -51,7 +51,7 @@ jobs:
       
       - uses: wyvox/action-setup-pnpm@v3
         with:
-          node-version: 16
+          node-version: 16.15.0
           pnpm-version: 7.9.4
 
       - name: Build the app

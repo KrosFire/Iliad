@@ -13,5 +13,9 @@ export default defineConfig({
       { find: /^@\/(.*)/, replacement: resolve(__dirname, 'src/$1') },
       { find: /^~\/(.*)/, replacement: resolve(__dirname, '$1') },
     ],
+    coverage: {
+      provider: 'istanbul',
+      exclude: ['**/node_modules/**', '**/dist/**', 'src/plugins/**', 'src-tauri/**'],
+    },
   },
 })
