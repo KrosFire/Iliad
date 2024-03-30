@@ -21,6 +21,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": false,
 
     "baseUrl": "./",
     "types": ["vite/client", "vitest/globals"],
