@@ -1,16 +1,41 @@
-# Tauri + Vue 3 + TypeScript
+# Illiade
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+![Illiade logo](./src/assets/logo.png)
 
-## Recommended IDE Setup
+An IDE build on [Tauri](https://tauri.app/) with [Rust](https://www.rust-lang.org/) and [Vue](https://vuejs.org/). Powered by [Ace Editor](https://ace.c9.io/).
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+## Install
 
-## Type Support For `.vue` Imports in TS
+Download latest [release](https://github.com/KrosFire/Illiade/releases) avaliable for:
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
+* MacOS
+* Windows
 
-1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
-2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
+Illiade comes with a basic CLI for easy navigation. To use it add alias to your command line for executable.
 
-You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
+MacOS:
+
+```sh
+echo "alias ill=\"[path to Illiade program]\"" >> [path to terminal config file]
+```
+
+Windows:
+
+1. Create a `.bat` or `.cmd` file:
+```bat
+@echo off
+
+DOSKEY ill="[Path to Illiade executable]"
+```
+2. Run regedit and go to (Win 10/11) `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor`
+3. Add String Value entry with the name AutoRun and the full path of your .bat/.cmd file.
+
+## Features
+
+* Syntax highlighting for 164 languages
+* Drag And Drop folders and files
+* Rearrange tabs
+* Resizable customizable windows system
+* CLI
+* Files synchronization
+* Persistent state
