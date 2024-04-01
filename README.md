@@ -1,6 +1,6 @@
 # Illiade
 
-![Illiade logo](./src/assets/logo.png)
+<img src="./src/assets/logo.png" alt="Illiade logo" width="250px" />
 
 An IDE build on [Tauri](https://tauri.app/) with [Rust](https://www.rust-lang.org/) and [Vue](https://vuejs.org/). Powered by [Ace Editor](https://ace.c9.io/).
 
