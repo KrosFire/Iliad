@@ -118,7 +118,7 @@ watch([rename, renameNodeInput], () => {
         'bg-selection': selected,
       },
     ]"
-    :style="indent ? `padding-left: ${indent * 20}px` : ''"
+    :style="`padding-left: ${((indent ?? 0) + 1) * 20}px`"
     :draggable="true"
     @dragstart="startDrag"
     @click.meta.stop.left.prevent="selectFolder('multiple')"
@@ -126,7 +126,21 @@ watch([rename, renameNodeInput], () => {
     @click.exact.stop.left.prevent="expandFolder"
     @click.exact.right="openContextMenu"
   >
-    <span>{{ name }}</span>
+    <span
+      :class="[
+        'relative',
+        'before:absolute',
+        'before:top-0',
+        'before:-left-5',
+        'before:w-4',
+        'before:h-4',
+        {
+          'before:bg-folder': !fsNode?.open,
+          'before:bg-folderOpen': fsNode?.open,
+        },
+      ]"
+      >{{ name }}</span
+    >
   </a>
   <input
     v-else
@@ -134,7 +148,7 @@ watch([rename, renameNodeInput], () => {
     v-model="folderName"
     type="text"
     :class="['p-1', 'block', 'bg-shadow', 'border-accent', 'text-text', 'overflow-hidden', 'text-ellipsis']"
-    :style="indent ? `margin-left: ${indent * 20}px` : ''"
+    :style="`margin-left: ${((indent ?? 0) + 1) * 20}px`"
     @blur="renameFolder"
   />
   <div v-show="fsNode?.open || create">

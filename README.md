@@ -1,6 +1,6 @@
 # Illiade
 
-<img src="./src/assets/logo.png" alt="Illiade logo" width="250px" />
+<img src="./public/logo.png" alt="Illiade logo" width="250px" />
 
 An IDE build on [Tauri](https://tauri.app/) with [Rust](https://www.rust-lang.org/) and [Vue](https://vuejs.org/). Powered by [Ace Editor](https://ace.c9.io/).
 
@@ -39,3 +39,4 @@ DOSKEY ill="[Path to Illiade executable]"
 * CLI
 * Files synchronization
 * Persistent state
+* File system manipulation (rename, delete files and folders)

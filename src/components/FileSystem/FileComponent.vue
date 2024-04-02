@@ -69,7 +69,7 @@ const openContextMenu = (e: MouseEvent) => {
       'overflow-hidden',
       'text-ellipsis',
     ]"
-    :style="indent ? `padding-left: ${indent * 20}px` : ''"
+    :style="`padding-left: ${((indent ?? 0) + 1) * 20}px`"
     :draggable="true"
     @click.meta.stop.prevent="selectFile('multiple')"
     @click.shift.stop.prevent="selectFile('mass')"
@@ -78,9 +78,6 @@ const openContextMenu = (e: MouseEvent) => {
     @dblclick.prevent="openFile"
     @click.exact.right="openContextMenu"
   >
-    <div>
-      <!-- TODO -->
-    </div>
     <span>
       {{ name }}
     </span>

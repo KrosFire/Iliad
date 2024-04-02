@@ -18,6 +18,10 @@ export default {
       fontFamily: {
         sans: ['var(--font-sans)', 'sans-serif'],
       },
+      backgroundImage: {
+        folder: "url('/folder.svg')",
+        folderOpen: "url('/folder-open.svg')",
+      },
     },
   },
   plugins: [],
