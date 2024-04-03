@@ -30,5 +30,9 @@ export const resolveAceResource = async (
 
   ace.config.setModuleUrl(moduleName, fileUrl)
 
+  if (type === 'ext') {
+    ace.config.loadModule(moduleName)
+  }
+
   loadedResources.add(moduleName)
 }

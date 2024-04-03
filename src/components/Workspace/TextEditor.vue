@@ -52,6 +52,9 @@ const fetchResources = async () => {
 
   await resolveAceResource('twilight', 'theme')
 
+  await resolveAceResource('language_tools', 'ext')
+  await resolveAceResource('searchbox', 'ext')
+
   loaded.value = true
 }
 
@@ -75,6 +78,8 @@ const updateValue = async (value: string) => {
     :options="{
       tabSize: settings.styles.tabSize ?? 2,
       useSoftTabs: true,
+      navigateWithinSoftTabs: true,
+      scrollPastEnd: true,
       highlightActiveLine: true,
       useWorker: true,
       enableBasicAutocompletion: true,
