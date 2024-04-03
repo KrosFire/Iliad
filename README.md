@@ -33,6 +33,7 @@ DOSKEY ill="[Path to Illiade executable]"
 ## Features
 
 * Syntax highlighting for 164 languages
+* Search file
 * Drag And Drop folders and files
 * Rearrange tabs
 * Resizable customizable windows system
