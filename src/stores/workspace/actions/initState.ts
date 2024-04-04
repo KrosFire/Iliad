@@ -19,10 +19,45 @@ const initState: WorkspaceActions['initState'] = async function (savedState) {
     }
   }
 
+  const initWindows = (
+    windows: EditorWorkspaceStore['windows'],
+    files: EditorWorkspaceStore['files'],
+  ): WorkspaceState['windows'] => {
+    const mapper: WorkspaceState['windows'] = {}
+
+    const fileIds = Object.keys(files)
+
+    for (const key in windows) {
+      const window = windows[key]
+
+      if (window.__typename === 'ContainerWindow') {
+        mapper[key] = {
+          __typename: 'ContainerWindow',
+          id: window.id,
+          children: window.children,
+          parent: window.parent,
+          direction: window.direction,
+        }
+      } else {
+        const tabs = window.tabs.filter(tab => tab.__typename === 'PageTab' || fileIds.includes(tab.id))
+
+        mapper[key] = {
+          __typename: 'TabsWindow',
+          id: window.id,
+          tabs,
+          parent: window.parent,
+          active: window.active < tabs.length ? window.active : 0,
+        }
+      }
+    }
+
+    return mapper
+  }
+
   const mapper: WorkspaceState = {
     active: savedState.active,
     fileSystem: await initFileSystem(savedState.fileSystem),
-    windows: savedState.windows,
+    windows: initWindows(savedState.windows, savedState.files),
     workspace: savedState.workspace,
     selectedFsNodes: savedState.selectedFsNodes,
     lastSelectedFsNode: savedState.lastSelectedFsNode,

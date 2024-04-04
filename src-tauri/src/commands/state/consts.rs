@@ -25,6 +25,7 @@ pub struct File {
   pub id: String,
   pub path: String,
   pub title: String,
+  pub ext: String,
   pub dir: String,
   pub lang: Nullable<String>,
   pub encoding: String,

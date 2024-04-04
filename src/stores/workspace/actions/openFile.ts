@@ -29,10 +29,11 @@ const openFile: WorkspaceActions['openFile'] = async function (filePath, encodin
     return id
   }
 
-  const { dir, name } = parse(filePath)
+  const { dir, name, ext } = parse(filePath)
   const file: File = {
     id: uuid(),
     title: name,
+    ext,
     path: filePath,
     dir: dir,
     lang: getLangFromPath(filePath),
