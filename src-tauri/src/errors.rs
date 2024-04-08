@@ -13,6 +13,9 @@ pub enum Error {
 
   #[error("general error: {0}")]
   GeneralError(String),
+
+  #[error("lsp not supported")]
+  LspNotSupported,
 }
 
 impl serde::Serialize for Error {

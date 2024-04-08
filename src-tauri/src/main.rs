@@ -1,6 +1,8 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use std::collections::HashMap;
+
 use cli::handle_cli;
 use gui::handle_gui;
 
@@ -13,6 +15,8 @@ mod gui;
 fn main() {    
     tauri::Builder::default()
         .setup(|app| {
+            assert_required_programs_exists().unwrap();
+            
             if std::env::args_os().count() > 1 {
                 handle_cli(app)?;
             } else {
@@ -41,7 +45,34 @@ fn main() {
             commands::close_window::close_window,
             commands::state::get_state::get_state,
             commands::state::update_state::update_state,
+            commands::start_lsp::start_lsp,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
+}
+
+fn assert_required_programs_exists() -> Result<(), errors::Error> {
+    let mut programs_status = HashMap::from([
+        ("typescript-language-server", false),
+        ("tsserver", false),
+    ]);
+
+    if let Ok(path) = std::env::var("PATH") {
+        for p in path.split(":") {
+            for program in programs_status.clone().keys() {
+                let p_str = format!("{}/{}", p, program);
+                if std::fs::metadata(p_str.clone()).is_ok() {
+                    programs_status.insert(program, true);
+                }
+            }
+        }
+    }
+
+    for (program, status) in programs_status {
+        if !status {
+            return Err(errors::Error::GeneralError(format!("Required program {} not found in PATH", program)));
+        }
+    }
+
+    Ok(())
 }

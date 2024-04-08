@@ -1,5 +1,6 @@
+import typescriptLsp from '@/lsp/typescriptLsp'
 import logger from '@/utils/logger'
-import { WorkspaceActions } from '~/types'
+import { KnownLanguages, WorkspaceActions } from '~/types'
 
 /**
  * Closes a window tab and (**if necessary**) window with it
@@ -30,6 +31,14 @@ const closeTab: WorkspaceActions['closeTab'] = async function (windowId, index) 
       if (window.__typename === 'TabsWindow' && window.tabs.some(({ id }) => id === tab.id)) fileExists = true
     }
     if (!fileExists) {
+      const file = this.files[tab.id]
+
+      switch (file.lang) {
+        case KnownLanguages.Typescript: {
+          await typescriptLsp.documentDidClose(file.path)
+        }
+      }
+
       delete this.files[tab.id]
     }
   }

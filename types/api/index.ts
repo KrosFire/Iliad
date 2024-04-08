@@ -1,4 +1,6 @@
-import { FileEncodings } from '..'
+import { NotificationMessage, RequestMessage, ResponseMessage } from 'vscode-languageserver'
+
+import { FileEncodings, KnownLanguages } from '..'
 import { GlobalStore } from '../editorStore/global'
 import { SettingsStore } from '../editorStore/settings'
 import { WorkspaceStore } from '../editorStore/workspace'
@@ -125,6 +127,33 @@ export interface Commands {
       newState: string
     }
     return: void
+  }
+
+  start_lsp: {
+    arguments: {
+      languageId: KnownLanguages
+    }
+    return: void
+  }
+}
+
+export interface Events {
+  lsp_server_started: {
+    payload: {
+      languageId: string
+      parentProcessId: number
+    }
+  }
+
+  lsp_msg_send: {
+    payload: {
+      languageId: string
+      message: RequestMessage | NotificationMessage
+    }
+  }
+
+  lsp_msg_received: {
+    payload: ResponseMessage
   }
 }
 

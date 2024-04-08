@@ -33,9 +33,13 @@ specifiers:
   tauri-plugin-fs-watch-api: github:tauri-apps/tauri-plugin-fs-watch#v1
   tslib: ^2.6.2
   typescript: ^5.0.2
+  typescript-language-server: ^4.3.3
   uuid: ^9.0.1
   vite: ^5.0.0
   vitest: ^1.4.0
+  vscode-jsonrpc: ^8.2.0
+  vscode-languageserver: ^9.0.1
+  vscode-uri: ^3.0.8
   vue: ^3.3.4
   vue-tsc: ^1.8.5
   vue3-ace-editor: ^2.2.4
@@ -52,7 +56,11 @@ dependencies:
   pinia: 2.1.7_uvcdd7474ilntvuyfubqjxprie
   tauri-plugin-context-menu: 0.7.0
   tauri-plugin-fs-watch-api: github.com/tauri-apps/tauri-plugin-fs-watch/1b5db098baee370c039ed12c8c43b0ab03314e03
+  typescript-language-server: 4.3.3
   uuid: 9.0.1
+  vscode-jsonrpc: 8.2.0
+  vscode-languageserver: 9.0.1
+  vscode-uri: 3.0.8
   vue: 3.4.15_typescript@5.3.3
   vue3-ace-editor: 2.2.4_cbx73kgnybkio5vpzwarshfdwq
   vue3-smooth-dnd: 0.0.6_vue@3.4.15
@@ -3303,6 +3311,15 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
+  /typescript-language-server/4.3.3:
+    resolution: {integrity: sha512-3QLj57Ru9S6zv10sa4z1pA3TIR1Rdkd04Ke0EszbO4fx5PLdlYhlC/PMxwlyxls9wrZs7wPCME1Ru0s1Gabz4Q==}
+    engines: {node: '>=18'}
+    hasBin: true
+    dependencies:
+      vscode-jsonrpc: 5.0.1
+      vscode-languageserver-protocol: 3.17.5
+    dev: false
+
   /typescript/5.3.3:
     resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
     engines: {node: '>=14.17'}
@@ -3462,6 +3479,38 @@ packages:
       - supports-color
       - terser
     dev: true
+
+  /vscode-jsonrpc/5.0.1:
+    resolution: {integrity: sha512-JvONPptw3GAQGXlVV2utDcHx0BiY34FupW/kI6mZ5x06ER5DdPG/tXWMVHjTNULF5uKPOUUD0SaXg5QaubJL0A==}
+    engines: {node: '>=8.0.0 || >=10.0.0'}
+    dev: false
+
+  /vscode-jsonrpc/8.2.0:
+    resolution: {integrity: sha512-C+r0eKJUIfiDIfwJhria30+TYWPtuHJXHtI7J0YlOmKAo7ogxP20T0zxB7HZQIFhIyvoBPwWskjxrvAtfjyZfA==}
+    engines: {node: '>=14.0.0'}
+    dev: false
+
+  /vscode-languageserver-protocol/3.17.5:
+    resolution: {integrity: sha512-mb1bvRJN8SVznADSGWM9u/b07H7Ecg0I3OgXDuLdn307rl/J3A9YD6/eYOssqhecL27hK1IPZAsaqh00i/Jljg==}
+    dependencies:
+      vscode-jsonrpc: 8.2.0
+      vscode-languageserver-types: 3.17.5
+    dev: false
+
+  /vscode-languageserver-types/3.17.5:
+    resolution: {integrity: sha512-Ld1VelNuX9pdF39h2Hgaeb5hEZM2Z3jUrrMgWQAu82jMtZp7p3vJT3BzToKtZI7NgQssZje5o0zryOrhQvzQAg==}
+    dev: false
+
+  /vscode-languageserver/9.0.1:
+    resolution: {integrity: sha512-woByF3PDpkHFUreUa7Hos7+pUWdeWMXRd26+ZX2A8cFx6v/JPTtd4/uN0/jB6XQHYaOlHbio03NTHCqrgG5n7g==}
+    hasBin: true
+    dependencies:
+      vscode-languageserver-protocol: 3.17.5
+    dev: false
+
+  /vscode-uri/3.0.8:
+    resolution: {integrity: sha512-AyFQ0EVmsOZOlAnxoFOGOq1SQDWAB7C6aqMGS23svWAllfOaxbuFvcT8D1i8z3Gyn8fraVeZNNmN6e9bxxXkKw==}
+    dev: false
 
   /vue-demi/0.14.6_vue@3.4.15:
     resolution: {integrity: sha512-8QA7wrYSHKaYgUxDA5ZC24w+eHm3sYCbp0EzcDwKqN3p6HqtTCGR/GVsPyZW92unff4UlcSh++lmqDWN3ZIq4w==}

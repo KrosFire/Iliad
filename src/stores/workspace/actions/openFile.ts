@@ -1,8 +1,9 @@
 import readFile from '@/api/readFile'
+import typescriptLsp from '@/lsp/typescriptLsp'
 import { getLangFromPath } from '@/supportedLangs'
 import logger from '@/utils/logger'
 import { parse } from '@/utils/path'
-import { WorkspaceActions } from '~/types'
+import { KnownLanguages, WorkspaceActions } from '~/types'
 import { File } from '~/types'
 import { FileEncodings } from '~/types'
 import { v4 as uuid } from 'uuid'
@@ -53,9 +54,19 @@ const openFile: WorkspaceActions['openFile'] = async function (filePath, encodin
     logger.error(`[openFile] ${e}`)
   }
 
+  await setupLsp(file)
+
   await this.watchFile(file.id)
 
   return file.id
+}
+
+const setupLsp = async (file: File) => {
+  switch (file.lang) {
+    case KnownLanguages.Typescript: {
+      typescriptLsp.documentDidOpen(file.path, file.editorContent)
+    }
+  }
 }
 
 export default openFile

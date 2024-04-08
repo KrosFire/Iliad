@@ -27,6 +27,8 @@
     "tauri-plugin-context-menu": "^0.7.0",
     "tauri-plugin-fs-watch-api": "github:tauri-apps/tauri-plugin-fs-watch#v1",
     "uuid": "^9.0.1",
+    "vscode-languageserver": "^9.0.1",
+    "vscode-uri": "^3.0.8",
     "vue": "^3.3.4",
     "vue3-ace-editor": "^2.2.4",
     "vue3-smooth-dnd": "^0.0.6",

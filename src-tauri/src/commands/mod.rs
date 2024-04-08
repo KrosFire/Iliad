@@ -12,3 +12,4 @@ pub mod path_exists;
 pub mod create_window;
 pub mod state;
 pub mod close_window;
+pub mod start_lsp;
