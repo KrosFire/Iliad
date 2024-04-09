@@ -26,7 +26,7 @@ class EditorWorkspaceStore {
       after(
         debounce(() => {
           this.setWorkspaceState(store.$state)
-        }, 1000),
+        }, 500),
       )
     })
   }

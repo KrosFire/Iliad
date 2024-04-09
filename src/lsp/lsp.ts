@@ -2,7 +2,16 @@ import { emit, listen } from '@/api/event'
 import invoke from '@/api/invoke'
 import { KnownLanguages } from '~/types'
 import uniqueId from 'lodash/uniqueId'
-import { NotificationMessage, RequestMessage, ResponseMessage } from 'vscode-languageserver'
+import {
+  CompletionList,
+  CompletionParams,
+  CompletionTriggerKind,
+  InitializeParams,
+  InitializeResult,
+  NotificationMessage,
+  RequestMessage,
+  ResponseMessage,
+} from 'vscode-languageserver'
 import { DocumentUri } from 'vscode-languageserver'
 import { URI } from 'vscode-uri'
 
@@ -12,8 +21,9 @@ import { URI } from 'vscode-uri'
 class LSP {
   private languageId: string
   private workspacePath: string
+  private duringInit = false
+  #autocompleteTriggerCharacters: string[] = []
   #initialized = false
-
   #filesVersion: Record<string, number> = {}
 
   constructor(languageId: KnownLanguages, workspacePath: string) {
@@ -21,14 +31,18 @@ class LSP {
     this.workspacePath = workspacePath
   }
 
-  private async startServer() {
+  private startServer() {
     return new Promise<number>(resolve => {
-      listen('lsp_server_started', payload => {
+      const unlistenFnPromise = listen('lsp_server_started', async payload => {
         if (payload.languageId !== this.languageId) {
           return
         }
 
         resolve(payload.parentProcessId)
+
+        const unlisten = await unlistenFnPromise
+
+        unlisten()
       })
 
       invoke('start_lsp', { languageId: this.languageId })
@@ -37,12 +51,23 @@ class LSP {
 
   public async init() {
     if (this.initialized) {
-      throw new Error('LSP already initialized')
+      return
     }
+
+    if (this.duringInit) {
+      return new Promise<void>(resolve => {
+        setTimeout(async () => {
+          await this.init()
+          resolve()
+        }, 100)
+      })
+    }
+
+    this.duringInit = true
 
     const processId = await this.startServer()
 
-    await this.sendRequest('initialize', {
+    const initParams: InitializeParams = {
       processId,
       rootUri: this.encodeUri(this.workspacePath),
       capabilities: {
@@ -72,11 +97,24 @@ class LSP {
             dynamicRegistration: true,
             linkSupport: true,
           },
+          completion: {
+            dynamicRegistration: true,
+            completionItem: {
+              snippetSupport: true,
+              labelDetailsSupport: true,
+            },
+            contextSupport: true,
+          },
         },
       },
-    })
+    }
+
+    const result = await this.sendRequest<InitializeResult>('initialize', initParams)
+
+    this.autocompleteTriggerCharacters = result.capabilities?.completionProvider?.triggerCharacters ?? []
 
     this.initialized = true
+    this.duringInit = false
 
     await this.sendNotification('initialized', {})
   }
@@ -86,8 +124,6 @@ class LSP {
       return
     }
 
-    this.filesVersion[uri] = 1
-
     await this.sendNotification('textDocument/didOpen', {
       textDocument: {
         uri,
@@ -96,6 +132,8 @@ class LSP {
         text,
       },
     })
+
+    this.filesVersion[uri] = 1
   }
 
   public async documentDidChange(uri: string, text: string) {
@@ -169,6 +207,33 @@ class LSP {
     })
   }
 
+  public async getCompletions(
+    uri: string,
+    text: string,
+    position: { line: number; character: number },
+  ): Promise<CompletionList | null> {
+    if (!this.filesVersion[uri]) {
+      await this.documentDidOpen(uri, text)
+    } else {
+      await this.documentDidChange(uri, text)
+    }
+
+    const params: CompletionParams = {
+      textDocument: {
+        uri: this.encodeUri(uri),
+      },
+      position: {
+        line: position.line,
+        character: position.character,
+      },
+      context: {
+        triggerKind: CompletionTriggerKind.Invoked,
+      },
+    }
+
+    return this.sendRequest('textDocument/completion', params)
+  }
+
   public async sendRequest<T extends ResponseMessage['result']>(
     method: string,
     params?: RequestMessage['params'],
@@ -234,6 +299,14 @@ class LSP {
 
   public set filesVersion(value) {
     this.#filesVersion = value
+  }
+
+  public get autocompleteTriggerCharacters() {
+    return this.#autocompleteTriggerCharacters
+  }
+
+  private set autocompleteTriggerCharacters(value) {
+    this.#autocompleteTriggerCharacters = value
   }
 }
 

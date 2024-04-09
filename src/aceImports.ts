@@ -9,13 +9,13 @@ const loadedResources = new Set<string>()
 export const resolveAceResource = async (
   resourceName: string,
   type: 'ext' | 'keybinding' | 'mode' | 'theme' | 'worker',
-) => {
+): Promise<any> => {
   const standardizedResourceName = resourceName.toLocaleLowerCase()
 
   const moduleName = `ace/${type}/${standardizedResourceName}`
 
   if (loadedResources.has(moduleName)) {
-    return
+    return ace.require(moduleName)
   }
 
   const resourceFileName = `${type}-${standardizedResourceName}.js`
@@ -30,9 +30,11 @@ export const resolveAceResource = async (
 
   ace.config.setModuleUrl(moduleName, fileUrl)
 
-  if (type === 'ext') {
-    ace.config.loadModule(moduleName)
-  }
+  return new Promise(resolve => {
+    ace.config.loadModule(moduleName, module => {
+      loadedResources.add(moduleName)
 
-  loadedResources.add(moduleName)
+      resolve(module)
+    })
+  })
 }

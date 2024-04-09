@@ -5,7 +5,7 @@ import LSP from './lsp'
 
 const workspacePath = window.__TAURI_METADATA__.__currentWindow.label
 
-class TypescriptLsp extends LSP {
+export class TypescriptLsp extends LSP {
   constructor() {
     super(KnownLanguages.Typescript, workspacePath)
   }

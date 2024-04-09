@@ -22,7 +22,7 @@ class EditorSettingsStore {
       after(
         debounce(() => {
           this.setSettingsState(store.$state)
-        }, 1000),
+        }, 500),
       )
     })
   }

@@ -9,6 +9,8 @@ import { Location } from 'vscode-languageserver'
 import { computed, onBeforeMount, ref, watch } from 'vue'
 import { VAceEditor } from 'vue3-ace-editor'
 
+import TypescriptCompleter from '../../lsp/TypescriptCompleter'
+
 const props = defineProps<{
   windowId: string
   id: string
@@ -56,7 +58,6 @@ const fetchResources = async () => {
 
   await resolveAceResource('twilight', 'theme')
 
-  await resolveAceResource('language_tools', 'ext')
   await resolveAceResource('searchbox', 'ext')
 
   loaded.value = true
@@ -72,8 +73,32 @@ const updateValue = async (value: string) => {
   store.updateEditorContent(file.value.id, value)
 }
 
+const aceGoToLocation = (editor: Ace.Editor, location: Location) => {
+  editor.gotoLine(location.range.start.line + 1, location.range.start.character, true)
+  editor.selection.selectToPosition({
+    row: location.range.end.line,
+    column: location.range.end.character,
+  })
+}
+
 const init = async (editor: Ace.Editor) => {
   await typescriptLsp.documentDidOpen(file.value.path, file.value.editorContent)
+
+  const langTools = await resolveAceResource('language_tools', 'ext')
+
+  editor.setOptions({
+    enableBasicAutocompletion: true,
+    enableSnippets: true,
+    enableLiveAutocompletion: true,
+  })
+
+  if (file.value.lang === KnownLanguages.Typescript || file.value.lang === KnownLanguages.JavaScript) {
+    langTools.setCompleters([])
+
+    const completer = new TypescriptCompleter(typescriptLsp, file.value.path)
+
+    langTools.addCompleter(completer)
+  }
 
   editor.commands.addCommands([
     {
@@ -86,6 +111,13 @@ const init = async (editor: Ace.Editor) => {
       bindKey: { win: 'Ctrl-D', mac: 'Command-D' },
       exec: goToDefinition,
     },
+    {
+      name: 'triggerAutocomplete',
+      bindKey: { win: 'Ctrk-.', mac: 'Command-.' },
+      exec: (editor: Ace.Editor) => {
+        editor.execCommand('startAutocomplete')
+      },
+    },
   ])
 
   if (actionToRun.value && editor) {
@@ -93,15 +125,7 @@ const init = async (editor: Ace.Editor) => {
       actionToRun.value.action === 'goToDefinition' &&
       typescriptLsp.decodeUri(actionToRun.value.location.uri) === file.value.path
     ) {
-      console.log('Go to definition', actionToRun.value)
-
-      const location = actionToRun.value.location
-      editor.gotoLine(location.range.start.line + 1, location.range.start.character, true)
-      editor.selection.selectToPosition({
-        row: location.range.end.line,
-        column: location.range.end.character,
-      })
-
+      aceGoToLocation(editor, actionToRun.value.location)
       actionToRun.value = undefined
     }
   }
@@ -125,20 +149,13 @@ const goToDefinition = async (editor: Ace.Editor) => {
 
       const file = typescriptLsp.decodeUri(location.uri)
 
-      console.log('File to open', file)
-
       const fileId = store.getFileId(file)
 
       if (fileId === tabId.value) {
-        editor.gotoLine(location.range.start.line + 1, location.range.start.character, true)
-        editor.selection.selectToPosition({
-          row: location.range.end.line,
-          column: location.range.end.character,
-        })
+        aceGoToLocation(editor, location)
       } else if (fileId) {
         store.openTab(props.windowId, { id: fileId, __typename: 'FileTab' }, -1)
         actionToRun.value = { action: 'goToDefinition', location }
-        // TODO: Open file in new tab and navigate to the location
       } else {
         store.openFilesInWindow([file], props.windowId, DropZone.CENTER)
         actionToRun.value = { action: 'goToDefinition', location }
@@ -161,9 +178,6 @@ const goToDefinition = async (editor: Ace.Editor) => {
       scrollPastEnd: true,
       highlightActiveLine: true,
       useWorker: true,
-      enableBasicAutocompletion: true,
-      enableSnippets: true,
-      enableLiveAutocompletion: true,
     }"
     :style="{
       'font-size': `${settings.styles.fontSize}px`,
