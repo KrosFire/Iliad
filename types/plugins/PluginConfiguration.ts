@@ -1,6 +1,6 @@
 import { PLUGIN_TYPES } from '../store'
 
-export interface PluginIlliadeOptions {
+export interface PluginIliadOptions {
   title: string
   icon: string
   description: string
@@ -15,5 +15,5 @@ export interface PluginIlliadeOptions {
 export interface PluginConfiguration {
   main: string
   version: string
-  illiade: PluginIlliadeOptions
+  iliad: PluginIliadOptions
 }

@@ -18,7 +18,7 @@ const schema: z.ZodDefault<z.ZodType<SettingsStore>> = z
       dragAndDrop: 'DragAndDrop',
     },
     styles: {
-      theme: 'IlliadeDark',
+      theme: 'IliadDark',
       tabSize: 2,
       fontSize: 14,
     },

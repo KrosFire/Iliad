@@ -61,7 +61,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tagName: ${{ github.event.inputs.tagName }}
-          releaseName: 'Illiade v__VERSION__' # tauri-action replaces \_\_VERSION\_\_ with the app version.
+          releaseName: 'Iliad v__VERSION__' # tauri-action replaces \_\_VERSION\_\_ with the app version.
           releaseBody: ${{ github.event.inputs.releaseBody }}
           releaseDraft: ${{ github.event.inputs.releaseDraft }}
           prerelease: ${{ github.event.inputs.prerelease }}

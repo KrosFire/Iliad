@@ -3,10 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "illiade": {
+  "iliad": {
     "title": "DragAndDrop",
     "icon": "",
-    "description": "Simple drag and drop animation for Illiade",
+    "description": "Simple drag and drop animation for Iliad",
     "author": "Hubert Jabłoński",
     "keywords": [
       "dragAndDrop",

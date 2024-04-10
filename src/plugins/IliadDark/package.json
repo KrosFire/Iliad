@@ -1,14 +1,14 @@
 {
-  "name": "illiade-dark-theme",
+  "name": "iliad-dark-theme",
   "private": true,
   "version": "0.0.0",
-  "illiade": {
-    "title": "Illiade Dark Theme",
+  "iliad": {
+    "title": "Iliad Dark Theme",
     "icon": "",
-    "description": "Builtin dark theme for Illiade",
+    "description": "Builtin dark theme for Iliad",
     "author": "Hubert Jabłoński",
     "keywords": [
-      "Illiade",
+      "Iliad",
       "DarkTheme"
     ],
     "repository": "",

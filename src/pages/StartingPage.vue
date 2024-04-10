@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 <template>
   <div class="home">
-    <h1>Welcome to Illiade</h1>
+    <h1>Welcome to Iliad</h1>
     <h2>Let the journey begin!</h2>
   </div>
 </template>

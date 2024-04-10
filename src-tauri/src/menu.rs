@@ -10,9 +10,9 @@ pub fn init() -> Menu {
 
     Menu::new()
         .add_submenu(Submenu::new(
-            "Illiade",
+            "Iliad",
             Menu::new()
-                .add_native_item(MenuItem::About("Illiade".to_string(), metadata))
+                .add_native_item(MenuItem::About("Iliad".to_string(), metadata))
                 .add_item(CustomMenuItem::new("settings", "Settings..."))
                 .add_native_item(MenuItem::Separator)
                 .add_item(CustomMenuItem::new("restart", "Restart"))
@@ -64,14 +64,12 @@ pub fn menu_event_handler(event: WindowMenuEvent) {
         "report_issue" => {
             api::shell::open(
                 &event.window().shell_scope(),
-                "https://github.com/KrosFire/Illiade/issues",
+                "https://github.com/KrosFire/Iliad/issues",
                 None,
             )
             .expect("failed to open the link");
         }
-        "restart" => {
-            api::process::restart(&event.window().env())
-        }
+        "restart" => api::process::restart(&event.window().env()),
         _ => {}
     }
 }

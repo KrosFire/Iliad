@@ -1443,7 +1443,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "illiade"
+name = "iliad"
 version = "0.0.0"
 dependencies = [
  "serde",

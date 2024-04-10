@@ -13,17 +13,17 @@ const registerPlugin: SettingsActions['registerPlugin'] = async function (plugin
   }
 
   try {
-    const { illiade } = JSON.parse(config)
+    const { iliad } = JSON.parse(config)
 
     this.plugins.push({
-      type: illiade.type,
-      name: illiade.title,
+      type: iliad.type,
+      name: iliad.title,
       active: true,
     })
 
-    switch (illiade.type) {
+    switch (iliad.type) {
       case 'dragAndDrop': {
-        this.animations.dragAndDrop = illiade.title
+        this.animations.dragAndDrop = iliad.title
         break
       }
       case 'theme': {
@@ -35,12 +35,12 @@ const registerPlugin: SettingsActions['registerPlugin'] = async function (plugin
           document.head.removeChild(themeLink)
         }
 
-        this.styles.theme = illiade.title
+        this.styles.theme = iliad.title
 
         const filePath = await resolveResource(`../src/plugins/${pluginName}/index.css`)
 
         const stylesTag = document.createElement('style')
-        stylesTag.id = illiade.title
+        stylesTag.id = iliad.title
         stylesTag.type = 'text/css'
 
         const styles = await readFile(filePath, FileEncodings.UTF8)
@@ -50,7 +50,7 @@ const registerPlugin: SettingsActions['registerPlugin'] = async function (plugin
         break
       }
       default: {
-        logger.error(`[registerPlugin] Failed to register a plugin. Unknown plugin type: ${illiade.type}`)
+        logger.error(`[registerPlugin] Failed to register a plugin. Unknown plugin type: ${iliad.type}`)
         return
       }
     }

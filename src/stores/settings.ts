@@ -13,7 +13,7 @@ export const useSettingsStore = defineStore<Stores.SETTINGS, SettingsState, Sett
         dragAndDrop: 'DragAndDrop',
       },
       styles: {
-        theme: 'IlliadeDark',
+        theme: 'IliadDark',
         tabSize: 4,
         fontSize: 14,
       },

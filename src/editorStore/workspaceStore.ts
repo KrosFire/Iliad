@@ -15,7 +15,7 @@ class EditorWorkspaceStore {
   private cwd: string
 
   constructor(workspacePath: string, localWorkspaceStore: LocalWorkspaceStore) {
-    this.cwd = `${workspacePath}${sep}.illiade`
+    this.cwd = `${workspacePath}${sep}.iliad`
 
     this.store = new Store<WorkspaceStore>({
       schema,
