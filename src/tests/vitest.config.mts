@@ -1,12 +1,6 @@
 /// <reference types="vitest" />
 import vue from '@vitejs/plugin-vue'
-import path from 'path'
 import { defineConfig } from 'vite'
-
-console.log('aliases', {
-  '@': path.resolve(__dirname, './src'),
-  '~': path.resolve(__dirname, './'),
-})
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -15,14 +9,21 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     alias: {
-      '@': path.resolve(__dirname, './src'),
-      '~': path.resolve(__dirname, './'),
+      '@': new URL('../', import.meta.url).pathname,
+      '~': new URL('../../', import.meta.url).pathname,
     },
     coverage: {
       provider: 'istanbul',
       exclude: ['**/node_modules/**', '**/dist/**', 'src/plugins/**', 'src-tauri/**'],
       reporter: ['text', 'json-summary', 'json'],
       reportOnFailure: true,
+    },
+  },
+  define: {
+    __TAURI_METADATA__: {
+      __currentWindow: {
+        label: 'test/workspace',
+      },
     },
   },
 })

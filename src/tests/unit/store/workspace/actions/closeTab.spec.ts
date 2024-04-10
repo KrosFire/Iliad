@@ -231,7 +231,11 @@ describe('closeTab action', () => {
   it('Updates active tab index correctly', async () => {
     const workspace = initWorkspaceState({
       workspace: 'abcd1234',
-      files: {},
+      files: {
+        file1: {} as any,
+        file2: {} as any,
+        file3: {} as any,
+      },
       windows: {
         abcd1234: {
           __typename: 'TabsWindow',

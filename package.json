@@ -12,8 +12,8 @@
     "lint:fix": "pnpm lint --fix",
     "format": "prettier --cache --log-level warn --ignore-path .gitignore -c \"src/**/*.+(js|ts|json|vue)\"",
     "format:fix": "prettier --cache --log-level warn --ignore-path .gitignore -w \"src/**/*.+(js|ts|json|vue)\"",
-    "test": "vitest -c vitest.config.mts",
-    "test:coverage": "vitest -c vitest.config.mts --coverage",
+    "test": "vitest -c src/tests/vitest.config.mts",
+    "test:coverage": "vitest -c src/tests/vitest.config.mts --coverage",
     "prepare": "husky"
   },
   "dependencies": {
