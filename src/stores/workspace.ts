@@ -1,5 +1,5 @@
 import { Stores, WorkspaceActions, WorkspaceGetters, WorkspaceState } from '~/types'
-import { defineStore } from 'pinia'
+import { acceptHMRUpdate, defineStore } from 'pinia'
 
 import actions from './workspace/actions'
 import getters from './workspace/getters'
@@ -20,3 +20,7 @@ export const useWorkspaceStore = defineStore<Stores.WORKSPACE, WorkspaceState, W
     actions,
   },
 )
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useWorkspaceStore, import.meta.hot))
+}

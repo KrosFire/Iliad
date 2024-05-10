@@ -4,7 +4,8 @@ import typescriptLsp from '@/lsp/typescriptLsp'
 import { useSettingsStore } from '@/stores'
 import { useWorkspaceStore } from '@/stores/workspace'
 import { DropZone, KnownLanguages, TabsWindow } from '~/types'
-import { Ace } from 'ace-builds'
+import ace, { Ace } from 'ace-builds'
+import { HoverTooltip } from 'ace-tooltip'
 import { Location } from 'vscode-languageserver'
 import { computed, onBeforeMount, ref, watch } from 'vue'
 import { VAceEditor } from 'vue3-ace-editor'
@@ -85,6 +86,11 @@ const init = async (editor: Ace.Editor) => {
   await typescriptLsp.documentDidOpen(file.value.path, file.value.editorContent)
 
   const langTools = await resolveAceResource('language_tools', 'ext')
+  const tooltip = ace.require('ace/tooltip')
+
+  const hoverTooltip: HoverTooltip = new tooltip.HoverTooltip()
+
+  hoverTooltip.addToEditor(editor)
 
   editor.setOptions({
     enableBasicAutocompletion: true,
@@ -95,7 +101,7 @@ const init = async (editor: Ace.Editor) => {
   if (file.value.lang === KnownLanguages.Typescript || file.value.lang === KnownLanguages.JavaScript) {
     langTools.setCompleters([])
 
-    const completer = new TypescriptCompleter(typescriptLsp, file.value.path)
+    const completer = new TypescriptCompleter(typescriptLsp, file.value.path, hoverTooltip)
 
     langTools.addCompleter(completer)
   }
@@ -195,5 +201,10 @@ const goToDefinition = async (editor: Ace.Editor) => {
   .ace_gutter {
     z-index: unset;
   }
+}
+
+.ace_tooltip {
+  padding: 0;
+  border: none;
 }
 </style>

@@ -5,7 +5,7 @@ export interface File {
   id: string
   path: string
   title: string
-  ext: string
+  ext?: string
   dir: string
   lang: KnownLanguages | null
   encoding: FileEncodings

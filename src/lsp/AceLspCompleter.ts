@@ -19,6 +19,11 @@ export default abstract class AceLspCompleter implements Ace.Completer {
     callback: Ace.CompleterCallback,
   ): Promise<void> | void
 
+  abstract hoverDataProvider(
+    e: MouseEvent & { getDocumentPosition: () => Ace.Position },
+    editor: Ace.Editor,
+  ): Promise<void> | void
+
   /**
    * Merge ranges.
    * Ranges are merged if they overlap or are adjacent.

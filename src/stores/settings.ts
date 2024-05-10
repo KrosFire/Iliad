@@ -1,5 +1,5 @@
 import { SettingsActions, SettingsGetters, SettingsState, Stores } from '~/types'
-import { defineStore } from 'pinia'
+import { acceptHMRUpdate, defineStore } from 'pinia'
 
 import actions from './settings/actions'
 import getters from './settings/getters'
@@ -22,3 +22,7 @@ export const useSettingsStore = defineStore<Stores.SETTINGS, SettingsState, Sett
     actions,
   },
 )
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useSettingsStore, import.meta.hot))
+}

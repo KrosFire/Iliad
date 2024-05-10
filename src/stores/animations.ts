@@ -1,5 +1,5 @@
 import { AnimationsActions, AnimationsGetters, AnimationsState, Stores } from '~/types'
-import { defineStore } from 'pinia'
+import { acceptHMRUpdate, defineStore } from 'pinia'
 
 import actions from './animations/actions'
 import getters from './animations/getters'
@@ -14,3 +14,7 @@ export const useAnimationsStore = defineStore<Stores.ANIMATIONS, AnimationsState
     actions,
   },
 )
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useAnimationsStore, import.meta.hot))
+}

@@ -6,8 +6,10 @@ import {
   CompletionList,
   CompletionParams,
   CompletionTriggerKind,
+  Hover,
   InitializeParams,
   InitializeResult,
+  MarkupContent,
   NotificationMessage,
   RequestMessage,
   ResponseMessage,
@@ -185,6 +187,19 @@ class LSP {
     }
 
     return this.sendRequest('textDocument/definition', {
+      textDocument: {
+        uri: this.encodeUri(uri),
+      },
+      position,
+    })
+  }
+
+  public async getHover(uri: string, text: string, position: { line: number; character: number }) {
+    if (!this.filesVersion[uri]) {
+      await this.documentDidOpen(uri, text)
+    }
+
+    return this.sendRequest<(Hover & { contents: MarkupContent }) | null>('textDocument/hover', {
       textDocument: {
         uri: this.encodeUri(uri),
       },

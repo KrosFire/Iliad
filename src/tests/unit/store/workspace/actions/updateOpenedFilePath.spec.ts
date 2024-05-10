@@ -86,6 +86,7 @@ describe('updateOpenedFilePath action', () => {
         file1: {
           id: 'file1',
           path: '/dir1/file1',
+          ext: '',
           title: 'file1',
           dir: '/dir1',
           lang: KnownLanguages.Text,

@@ -9,8 +9,8 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     alias: {
-      '@': new URL('../', import.meta.url).pathname,
-      '~': new URL('../../', import.meta.url).pathname,
+      '@': new URL('./src/', import.meta.url).pathname,
+      '~': new URL('./', import.meta.url).pathname,
     },
     coverage: {
       provider: 'istanbul',

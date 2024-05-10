@@ -34,6 +34,7 @@ describe('startRenameFsNode action', () => {
         file1: {
           id: 'file1',
           path: '/path/to/file1',
+          ext: '',
           encoding: FileEncodings.UTF8,
           editorContent: 'file content',
           saved: true,
@@ -93,6 +94,7 @@ describe('startRenameFsNode action', () => {
         file1: {
           id: 'file1',
           path: '/path/to/file1',
+          ext: '',
           encoding: FileEncodings.UTF8,
           editorContent: 'file content',
           saved: false,
@@ -125,6 +127,7 @@ describe('startRenameFsNode action', () => {
         file1: {
           id: 'file1',
           path: '/path/to/file1',
+          ext: '',
           encoding: FileEncodings.UTF8,
           editorContent: 'file content',
           saved: true,

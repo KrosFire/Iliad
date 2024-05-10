@@ -9,6 +9,7 @@ import menuManager from './managers/menu.manager'
 import settingsManager from './managers/settings.manager'
 
 import './index.css'
+import 'highlight.js/styles/stackoverflow-light.css'
 
 const workspacePath = window.__TAURI_METADATA__.__currentWindow.label
 

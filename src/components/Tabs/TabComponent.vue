@@ -19,7 +19,9 @@ defineEmits<{
 const store = useWorkspaceStore()
 
 const title = computed<string>(() =>
-  store.files[props.id] ? `${store.files[props.id].title}.${store.files[props.id].ext}` : props.id,
+  store.files[props.id]
+    ? `${store.files[props.id].title}${store.files[props.id].ext && '.' + store.files[props.id].ext}`
+    : props.id,
 )
 const saved = computed<boolean>(() => store.files[props.id]?.saved)
 const removed = computed<boolean>(() => store.files[props.id]?.removed)
