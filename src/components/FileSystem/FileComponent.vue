@@ -1,61 +1,57 @@
 <script setup lang="ts">
 import getContextMenu from '@/contextMenus/fileContextMenu'
 import { useWorkspaceStore } from '@/stores'
+import { FileSystemFile } from '~/types'
 import { showMenu } from 'tauri-plugin-context-menu'
 import { computed, ref } from 'vue'
 
 const props = defineProps<{
-  name: string
-  path: string
+  fsNode: FileSystemFile
   indent?: number
 }>()
 
 const store = useWorkspaceStore()
 
-const fileName = ref(props.name)
-const selected = computed(() => store.selectedFsNodes.some(({ path: selectedPath }) => props.path === selectedPath))
-const rename = computed(() => !!store.getFsNode(props.path)?.rename)
-const fileNode = computed(() => store.getFsNode(props.path))
+const fileName = ref(props.fsNode.name)
+const selected = computed(() =>
+  store.selectedFsNodes.some(({ path: selectedPath }) => props.fsNode.path === selectedPath),
+)
 
 const startDrag = (event: DragEvent) => {
   const selectedFiles = store.selectedFsNodes.map(({ path }) => path)
 
-  if (selectedFiles.includes(props.path)) {
+  if (selectedFiles.includes(props.fsNode.path)) {
     event.dataTransfer?.setData('application/tauri-files', JSON.stringify(selectedFiles))
     return
   }
 
-  event.dataTransfer?.setData('application/tauri-files', JSON.stringify([props.path]))
+  event.dataTransfer?.setData('application/tauri-files', JSON.stringify([props.fsNode.path]))
 }
 
 const selectFile = (mode: 'single' | 'multiple' | 'mass') => {
-  store.selectFsNode(props.path, mode)
+  store.selectFsNode(props.fsNode.path, mode)
 }
 
 const openFile = async (e: MouseEvent) => {
   e.stopPropagation()
   e.preventDefault()
 
-  store.openFilesInWindow([props.path])
+  store.openFilesInWindow([props.fsNode.path])
 }
 
 const renameFile = async () => {
-  store.stopRenameFsNode(props.path, fileName.value)
+  store.stopRenameFsNode(props.fsNode.path, fileName.value)
 }
 
 const openContextMenu = (e: MouseEvent) => {
   e.preventDefault()
 
-  if (!fileNode.value || fileNode.value.__typename === 'FileSystemDirectory') {
-    return
-  }
-
-  showMenu(getContextMenu(fileNode.value, store))
+  showMenu(getContextMenu(props.fsNode, store))
 }
 </script>
 <template>
   <div
-    v-if="!rename"
+    v-if="!fsNode.rename"
     :class="[
       'p-1',
       'select-none',
@@ -79,7 +75,7 @@ const openContextMenu = (e: MouseEvent) => {
     @click.exact.right="openContextMenu"
   >
     <span>
-      {{ name }}
+      {{ fsNode.name }}
     </span>
   </div>
   <input

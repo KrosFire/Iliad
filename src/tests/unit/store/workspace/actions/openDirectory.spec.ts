@@ -12,10 +12,12 @@ import readDir from '@/api/readDir'
 import { useWorkspaceStore } from '@/stores'
 import { initWorkspaceState } from '@/tests/helpers/initState'
 import { createPinia, setActivePinia } from 'pinia'
+import { watch } from 'tauri-plugin-fs-watch-api'
 import { MockedFunction } from 'vitest'
 
 describe('openDirectory action', () => {
   const readdirMock = readDir as unknown as MockedFunction<typeof readDir>
+  const watchMock = watch as unknown as MockedFunction<typeof watch>
 
   beforeEach(() => {
     setActivePinia(createPinia())
@@ -35,6 +37,7 @@ describe('openDirectory action', () => {
           },
         ] as any,
     )
+    watchMock.mockImplementationOnce(() => new Promise(() => {}) as any)
 
     const workspace = initWorkspaceState({
       workspace: 'abcd1234',

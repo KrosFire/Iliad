@@ -54,11 +54,20 @@ const initState: WorkspaceActions['initState'] = async function (savedState) {
     return mapper
   }
 
+  const windows = initWindows(savedState.windows, savedState.files)
+
+  let workspace = savedState.workspace
+  let active = savedState.active
+  if (workspace && !Object.keys(windows).includes(workspace)) {
+    workspace = null
+    active = null
+  }
+
   const mapper: WorkspaceState = {
-    active: savedState.active,
+    active,
     fileSystem: await initFileSystem(savedState.fileSystem),
-    windows: initWindows(savedState.windows, savedState.files),
-    workspace: savedState.workspace,
+    windows,
+    workspace,
     selectedFsNodes: savedState.selectedFsNodes,
     lastSelectedFsNode: savedState.lastSelectedFsNode,
     files: savedState.files,

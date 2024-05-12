@@ -18,6 +18,7 @@ export default defineConfig({
       reporter: ['text', 'json-summary', 'json'],
       reportOnFailure: true,
     },
+    setupFiles: ['./src/tests/setup.ts'],
   },
   define: {
     __TAURI_METADATA__: {

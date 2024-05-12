@@ -1,7 +1,6 @@
 import readDir from '@/api/readDir'
-import readLink from '@/api/readLink'
 import logger from '@/utils/logger'
-import { WorkspaceActions } from '~/types'
+import { FileSystemNode, WorkspaceActions } from '~/types'
 import { watch } from 'tauri-plugin-fs-watch-api'
 
 import compareFsNodes from '../helpers/compareFsNodes'
@@ -17,14 +16,16 @@ const openDirectory: WorkspaceActions['openDirectory'] = async function (path) {
     return
   }
 
+  const newChildren: FileSystemNode[] = []
+
   try {
     const files = await readDir(path, { withTypes: true })
 
-    dir.children = []
-
-    for (const file of files) {
+    let len = files.length
+    while (len--) {
+      const file = files[len]
       if (file.is_dir) {
-        dir.children.push({
+        newChildren.push({
           __typename: 'FileSystemDirectory',
           path: file.path,
           name: file.name,
@@ -33,13 +34,12 @@ const openDirectory: WorkspaceActions['openDirectory'] = async function (path) {
           parent: dir.path,
         })
       } else {
-        dir.children.push({
+        newChildren.push({
           __typename: 'FileSystemFile',
           path: file.path,
           name: file.name,
           parent: dir.path,
           isLink: file.is_symlink,
-          linkTarget: file.is_symlink ? await readLink(file.path) : undefined,
         })
       }
     }
@@ -48,19 +48,35 @@ const openDirectory: WorkspaceActions['openDirectory'] = async function (path) {
     return
   }
 
-  dir.children.sort(compareFsNodes)
+  newChildren.sort(compareFsNodes)
+
+  let length = newChildren.length
+  while (length--) {
+    const child = newChildren[length]
+    const existingNode = dir.children.at(length)
+    if (existingNode?.path !== child.path) {
+      dir.children = newChildren
+      break
+    }
+  }
+
   dir.open = true
 
-  dir.watcher = await watch(
+  watch(
     path,
     () => {
       dir.watcher?.()
+      if (!dir.open) {
+        return
+      }
       this.openDirectory(path)
     },
     {
       delayMs: 100,
     },
-  )
+  ).then(watcher => {
+    dir.watcher = watcher
+  })
 }
 
 export default openDirectory

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import getContextMenu from '@/contextMenus/folderContextMenu'
 import { useWorkspaceStore } from '@/stores'
-import { sep } from '@tauri-apps/api/path'
 import { FileSystemDirectory } from '~/types'
 import { showMenu } from 'tauri-plugin-context-menu'
 import { computed, ref, watch } from 'vue'
@@ -9,52 +8,46 @@ import { computed, ref, watch } from 'vue'
 import FileComponent from './FileComponent.vue'
 
 const props = defineProps<{
-  path: string
+  fsNode: FileSystemDirectory
   indent?: number
 }>()
 
 const store = useWorkspaceStore()
 
-const name = computed(() => (props.path?.length ? props.path.split(sep).findLast(seg => !!seg) : 'Root'))
-
-const folderName = ref(name.value)
+const folderName = ref(props.fsNode.name)
 const newNodeName = ref('')
 const createNodeInput = ref<HTMLElement>()
 const renameNodeInput = ref<HTMLElement>()
 
-const selected = computed(() => store.selectedFsNodes.some(({ path }) => path === props.path))
-const fsNode = computed(() => store.getFsNode(props.path) as FileSystemDirectory | null)
-const rename = computed(() => !!fsNode.value?.rename)
-const create = computed(() => !!fsNode.value?.create)
+const selected = computed(() => store.selectedFsNodes.some(({ path }) => path === props.fsNode.path))
 
 const selectFolder = (mode: 'single' | 'multiple' | 'mass') => {
-  store.selectFsNode(props.path, mode)
+  store.selectFsNode(props.fsNode.path, mode)
 }
 
-const expandFolder = () => {
-  if (!fsNode.value) return
-
-  if (!fsNode.value.open) store.openDirectory(props.path)
-  else store.closeDirectory(props.path)
+const expandFolder = async () => {
+  if (!props.fsNode.open) {
+    await store.openDirectory(props.fsNode.path)
+  } else {
+    await store.closeDirectory(props.fsNode.path)
+  }
 
   selectFolder('single')
 }
 
 const renameFolder = async () => {
-  store.stopRenameFsNode(props.path, folderName.value)
+  store.stopRenameFsNode(props.fsNode.path, folderName.value)
 }
 
 const createFsNode = () => {
-  if (!fsNode.value) return
-
   if (!newNodeName.value.trim().length) {
-    store.stopFsNodeCreation(props.path)
+    store.stopFsNodeCreation(props.fsNode.path)
     return
   }
 
-  const path = `${props.path}/${newNodeName.value}`
+  const path = `${props.fsNode.path}/${newNodeName.value}`
 
-  switch (fsNode.value.create) {
+  switch (props.fsNode.create) {
     case 'file':
       store.createFile(path)
       break
@@ -69,42 +62,38 @@ const createFsNode = () => {
 const startDrag = (event: DragEvent) => {
   const selectedFiles = store.selectedFsNodes.map(({ path }) => path)
 
-  if (selectedFiles.includes(props.path)) {
+  if (selectedFiles.includes(props.fsNode.path)) {
     event.dataTransfer?.setData('application/tauri-files', JSON.stringify(selectedFiles))
     return
   }
 
-  event.dataTransfer?.setData('application/tauri-files', JSON.stringify([props.path]))
+  event.dataTransfer?.setData('application/tauri-files', JSON.stringify([props.fsNode.path]))
 }
 
 const openContextMenu = (e: MouseEvent) => {
   e.preventDefault()
 
-  if (!fsNode.value) {
-    return
-  }
-
-  showMenu(getContextMenu(fsNode.value, store))
+  showMenu(getContextMenu(props.fsNode, store))
 }
 
-watch([create, createNodeInput], () => {
-  if (create.value && createNodeInput.value) {
+watch(createNodeInput, () => {
+  if (props.fsNode.create && createNodeInput.value) {
     newNodeName.value = ''
     createNodeInput.value.focus()
   }
 })
 
-watch([rename, renameNodeInput], () => {
-  if (rename.value && renameNodeInput.value) {
-    folderName.value = name.value
+watch(renameNodeInput, () => {
+  if (props.fsNode.rename && renameNodeInput.value) {
+    folderName.value = props.fsNode.name
     renameNodeInput.value.focus()
   }
 })
 </script>
 <template>
   <a
-    v-if="!rename"
-    :href="`folder://${path}`"
+    v-if="!fsNode.rename"
+    :href="`folder://${fsNode.path}`"
     :class="[
       'p-1',
       'select-none',
@@ -139,7 +128,7 @@ watch([rename, renameNodeInput], () => {
           'before:bg-folderOpen': fsNode?.open,
         },
       ]"
-      >{{ name }}</span
+      >{{ fsNode.name }}</span
     >
   </a>
   <input
@@ -151,11 +140,19 @@ watch([rename, renameNodeInput], () => {
     :style="`margin-left: ${((indent ?? 0) + 1) * 20}px`"
     @blur="renameFolder"
   />
-  <div v-show="fsNode?.open || create">
-    <input v-if="create" ref="createNodeInput" v-model="newNodeName" type="text" @blur="createFsNode" />
-    <div v-for="(file, key) in fsNode?.children" :key="key">
-      <FolderComponent v-if="file.__typename === 'FileSystemDirectory'" :path="file.path" :indent="(indent ?? 0) + 1" />
-      <FileComponent v-else :name="file.name" :path="file.path" :indent="(indent ?? 0) + 1" />
+  <div v-if="fsNode?.open || fsNode.create">
+    <input
+      v-if="fsNode.create"
+      ref="createNodeInput"
+      v-model="newNodeName"
+      :class="['p-1', 'block', 'bg-shadow', 'border-accent', 'text-text', 'overflow-hidden', 'text-ellipsis']"
+      :style="`margin-left: ${((indent ?? 0) + 2) * 20}px`"
+      type="text"
+      @blur="createFsNode"
+    />
+    <div v-for="file in fsNode.children" :key="file.path">
+      <FolderComponent v-if="file.__typename === 'FileSystemDirectory'" :fs-node="file" :indent="(indent ?? 0) + 1" />
+      <FileComponent v-else :fs-node="file" :indent="(indent ?? 0) + 1" />
     </div>
   </div>
 </template>

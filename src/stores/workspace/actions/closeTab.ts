@@ -11,16 +11,17 @@ const closeTab: WorkspaceActions['closeTab'] = async function (windowId, index) 
   if (window.__typename === 'ContainerWindow') return logger.error('[closeTab] Given window is a container window')
 
   const tab = window.tabs[index]
-  if (index <= window.active && index > 0) {
-    window.active--
-    this.windows[windowId] = window
-  }
-  window.tabs.splice(index, 1)
-  this.windows[windowId] = window
 
   // If window has no more tabs left, we remove it from parent window and store itself
-  if (!window.tabs.length) {
-    this.closeWindow(windowId)
+  if (!(window.tabs.length - 1)) {
+    await this.closeWindow(windowId)
+  } else {
+    if (window.active === window.tabs.length - 1) {
+      window.active = window.tabs.length - 2
+    }
+    window.tabs.splice(index, 1)
+
+    this.windows[windowId] = window
   }
 
   // Check if tab is a file
@@ -28,7 +29,10 @@ const closeTab: WorkspaceActions['closeTab'] = async function (windowId, index) 
     let fileExists = false
     for (const id of Object.keys(this.windows)) {
       const window = this.windows[id]
-      if (window.__typename === 'TabsWindow' && window.tabs.some(({ id }) => id === tab.id)) fileExists = true
+      if (window.__typename === 'TabsWindow' && window.tabs.some(({ id }) => id === tab.id)) {
+        fileExists = true
+        break
+      }
     }
     if (!fileExists) {
       const file = this.files[tab.id]

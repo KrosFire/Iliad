@@ -17,12 +17,6 @@ const closeDirectory: WorkspaceActions['closeDirectory'] = async function (path)
   }
 
   dir.open = false
-
-  for (const child of dir.children) {
-    if (child.__typename === 'FileSystemDirectory') {
-      this.closeDirectory(child.path)
-    }
-  }
 }
 
 export default closeDirectory

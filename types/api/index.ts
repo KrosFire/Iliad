@@ -155,6 +155,10 @@ export interface Events {
   lsp_msg_received: {
     payload: ResponseMessage
   }
+
+  lsp_server_dead: {
+    payload: string
+  }
 }
 
 export interface ReadDirItem {

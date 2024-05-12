@@ -99,13 +99,12 @@ fn launch_lsp(
 
         let language_id_1 = language_id.clone();
 
+        let window_ = window.clone();
         window.listen("lsp_msg_send", move |event| {
           let language_id = language_id_1.clone();
 
           let payload = serde_json::from_str::<LspMessageSend>(event.payload().unwrap()).unwrap();
           
-          println!("lsp_msg_send: {:?}", payload);
-
           if payload.languageId != language_id {
               return;
           }
@@ -115,7 +114,12 @@ fn launch_lsp(
           let msg = serde_json::to_string(&payload.message).unwrap();
           let msg = msg.as_bytes();
       
-          stdin.write_all(format!("Content-Length: {}\r\n\r\n", msg.len()).as_bytes()).unwrap();
+          if let Err(_) = stdin.write_all(format!("Content-Length: {}\r\n\r\n", msg.len()).as_bytes()) {
+            println!("Error writing to stdin");
+            window_.unlisten(event.id());
+            window_.emit("lsp_server_dead", language_id).unwrap();
+            return;
+          }
           stdin.write_all(msg).unwrap();
         });
 
@@ -181,8 +185,6 @@ fn handle_server_response(window: tauri::Window, stdout: Arc<Mutex<ChildStdout>>
       reader.read_exact(&mut content).unwrap();
 
       let line = String::from_utf8_lossy(&content).to_string();
-
-      println!("lsp_msg_received: {:?}", line);
 
       window.emit("lsp_msg_received", serde_json::from_str::<serde_json::Value>(&line).unwrap()).unwrap();
   }

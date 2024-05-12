@@ -183,7 +183,6 @@ const goToDefinition = async (editor: Ace.Editor) => {
       navigateWithinSoftTabs: true,
       scrollPastEnd: true,
       highlightActiveLine: true,
-      useWorker: true,
     }"
     :style="{
       'font-size': `${settings.styles.fontSize}px`,

@@ -6,7 +6,7 @@ describe('closeDirectory action', () => {
     setActivePinia(createPinia())
   })
 
-  it('Removes directory', async () => {
+  it('closes only parent directory', async () => {
     const watcherMock = vi.fn()
 
     const workspace = initWorkspaceState({
@@ -74,7 +74,7 @@ describe('closeDirectory action', () => {
               path: '/dir1/dir2',
               name: '',
               parent: '',
-              open: false,
+              open: true,
               watcher: watcherMock,
               children: [
                 {
@@ -82,7 +82,7 @@ describe('closeDirectory action', () => {
                   path: '/dir1/dir2/dir3',
                   name: '',
                   parent: '',
-                  open: false,
+                  open: true,
                   watcher: watcherMock,
                   children: [],
                 },
@@ -93,6 +93,6 @@ describe('closeDirectory action', () => {
       ],
     })
 
-    expect(watcherMock).toHaveBeenCalledTimes(3)
+    expect(watcherMock).toHaveBeenCalledTimes(1)
   })
 })

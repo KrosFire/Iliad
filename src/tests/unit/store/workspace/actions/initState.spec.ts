@@ -29,9 +29,9 @@ describe('initState action', () => {
         },
       },
       windows: {
-        abd1234: {
+        abcd1234: {
           __typename: 'TabsWindow',
-          id: 'abd1234',
+          id: 'abcd1234',
           parent: null,
           tabs: [
             {
@@ -53,9 +53,9 @@ describe('initState action', () => {
     expect(workspace.lastSelectedFsNode).toBe(null)
     expect(workspace.fileSystem).toBe(null)
     expect(workspace.windows).toEqual({
-      abd1234: {
+      abcd1234: {
         __typename: 'TabsWindow',
-        id: 'abd1234',
+        id: 'abcd1234',
         parent: null,
         tabs: [
           {

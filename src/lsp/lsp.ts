@@ -24,13 +24,15 @@ class LSP {
   private languageId: string
   private workspacePath: string
   private duringInit = false
-  #autocompleteTriggerCharacters: string[] = []
+  #autocompleteTriggerCharacters: string[] = ['.', '"', "'", '`', '/']
   #initialized = false
   #filesVersion: Record<string, number> = {}
 
   constructor(languageId: KnownLanguages, workspacePath: string) {
     this.languageId = languageId.toLowerCase()
     this.workspacePath = workspacePath
+
+    this.handleRestart()
   }
 
   private startServer() {
@@ -111,7 +113,20 @@ class LSP {
       },
     }
 
-    const result = await this.sendRequest<InitializeResult>('initialize', initParams)
+    let result: InitializeResult
+
+    try {
+      result = await this.sendRequest<InitializeResult>('initialize', initParams)
+    } catch (e: any) {
+      if (e.code === -32603) {
+        // Server already initialized - happens only in dev mode
+        this.initialized = true
+        this.duringInit = false
+        return
+      }
+
+      throw e
+    }
 
     this.autocompleteTriggerCharacters = result.capabilities?.completionProvider?.triggerCharacters ?? []
 
@@ -285,6 +300,23 @@ class LSP {
           params,
         },
       })
+
+      setTimeout(async () => {
+        await unlistenFnPromise
+        reject('Request timeout')
+      }, 5_000)
+    })
+  }
+
+  private handleRestart() {
+    listen('lsp_server_dead', async languageId => {
+      if (languageId !== this.languageId) {
+        return
+      }
+
+      this.initialized = false
+      this.filesVersion = {}
+      await this.init()
     })
   }
 

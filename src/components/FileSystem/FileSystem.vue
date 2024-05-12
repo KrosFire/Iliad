@@ -5,12 +5,12 @@ import { computed } from 'vue'
 import FolderComponent from './FolderComponent.vue'
 
 const store = useWorkspaceStore()
-const path = computed(() => store.fileSystem?.path)
+const fsNode = computed(() => store.fileSystem)
 </script>
 <template>
   <div
     class="h-screen min-w-32 overflow-auto rounded-br-md rounded-tr-md border-2 border-accent bg-background text-text"
   >
-    <FolderComponent v-if="path" :path="path" />
+    <FolderComponent v-if="fsNode" :fs-node="fsNode" />
   </div>
 </template>

@@ -22,6 +22,10 @@ const watchFile: WorkspaceActions['watchFile'] = async function (fileId) {
         return
       }
 
+      if (!this.files[file.id]) {
+        return
+      }
+
       this.files[file.id].removed = false
 
       try {
