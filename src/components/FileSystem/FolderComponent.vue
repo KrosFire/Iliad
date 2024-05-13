@@ -101,11 +101,11 @@ watch(renameNodeInput, () => {
       'no-underline',
       'block',
       'hover:bg-shadow',
-      'overflow-hidden',
-      'text-ellipsis',
       {
         'bg-selection': selected,
       },
+      'text-ellipsis',
+      'overflow-hidden',
     ]"
     :style="`padding-left: ${((indent ?? 0) + 1) * 20}px`"
     :draggable="true"

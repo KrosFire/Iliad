@@ -62,8 +62,8 @@ const openContextMenu = (e: MouseEvent) => {
       {
         'bg-selection': selected,
       },
-      'overflow-hidden',
       'text-ellipsis',
+      'overflow-hidden',
     ]"
     :style="`padding-left: ${((indent ?? 0) + 1) * 20}px`"
     :draggable="true"

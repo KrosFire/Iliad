@@ -27,7 +27,7 @@ const renderWindows = (windowId: string): any => {
       {
         class: [
           'flex',
-          'flex-1',
+          'flex-shrink',
           'min-w-0',
           'min-h-0',
           {
@@ -55,7 +55,7 @@ const windowStructure = () => {
 }
 </script>
 <template>
-  <div class="flex max-h-screen min-h-full w-full">
+  <div class="flex min-h-full flex-1 flex-grow-[0.95] overflow-hidden">
     <windowStructure />
   </div>
 </template>

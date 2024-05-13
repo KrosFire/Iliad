@@ -45,7 +45,7 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div class="flex h-screen flex-nowrap bg-background">
+  <div class="flex h-screen w-screen flex-nowrap bg-background">
     <FileSystem />
     <Workspace />
   </div>

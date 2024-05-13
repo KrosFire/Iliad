@@ -76,33 +76,25 @@ class LSP {
       rootUri: this.encodeUri(this.workspacePath),
       capabilities: {
         workspace: {
-          executeCommand: {
-            dynamicRegistration: true,
-          },
           applyEdit: true,
           workspaceEdit: {
             documentChanges: true,
           },
           didChangeWatchedFiles: {
             relativePatternSupport: true,
-            dynamicRegistration: true,
           },
         },
         textDocument: {
           synchronization: {
-            dynamicRegistration: true,
             didSave: true,
           },
           definition: {
-            dynamicRegistration: true,
             linkSupport: true,
           },
           declaration: {
-            dynamicRegistration: true,
             linkSupport: true,
           },
           completion: {
-            dynamicRegistration: true,
             completionItem: {
               snippetSupport: true,
               labelDetailsSupport: true,
