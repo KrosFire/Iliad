@@ -8,7 +8,7 @@ const getContextMenu = (file: FileSystemFile, workspaceStore: WorkspaceStore): C
     {
       label: 'Open',
       event: () => {
-        workspaceStore.openFile(file.path)
+        workspaceStore.openFilesInWindow([file.path])
       },
     },
     {

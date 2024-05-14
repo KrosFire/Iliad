@@ -55,7 +55,7 @@ const windowStructure = () => {
 }
 </script>
 <template>
-  <div class="flex min-h-full flex-1 flex-grow-[0.95] overflow-hidden">
+  <div class="flex min-h-full flex-1 overflow-hidden">
     <windowStructure />
   </div>
 </template>

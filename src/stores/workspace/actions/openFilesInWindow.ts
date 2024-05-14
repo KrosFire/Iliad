@@ -9,7 +9,7 @@ const openFilesInWindow: WorkspaceActions['openFilesInWindow'] = async function 
 ) {
   windowId = windowId ?? this.getDefaultTabsWindow() ?? undefined
 
-  const tabs = await Promise.all(
+  let tabs = await Promise.all(
     filePaths.map<Promise<Tab>>(async filePath => ({
       __typename: 'FileTab',
       id: await this.openFile(filePath),
@@ -66,13 +66,29 @@ const openFilesInWindow: WorkspaceActions['openFilesInWindow'] = async function 
 
     windowId = await this.createTabsWindow(parentId, tabs, positionOfWindow)
   } else {
+    tabs = tabs.filter(tab => !window.tabs.some(t => t.id === tab.id))
     window.tabs.splice(tabIndex === -1 ? window.tabs.length : tabIndex, 0, ...tabs)
 
     this.windows[windowId] = window
   }
 
   const tabsWindow = this.windows[windowId] as TabsWindow
-  tabsWindow.active = tabIndex === -1 ? tabsWindow.tabs.length - 1 : tabIndex + 1
+
+  if (filePaths.length === 1 && !tabs.length) {
+    const fileId = this.getFileId(filePaths[0])
+
+    if (!fileId) {
+      return logger.error(`[openFilesInWindow] Could not open file ${filePaths[0]}`)
+    }
+
+    ;(this.windows[windowId] as TabsWindow).active = tabsWindow.tabs.findIndex(tab => tab.id === fileId)
+  } else {
+    tabsWindow.active = Math.min(
+      tabIndex === -1 ? tabsWindow.tabs.length - 1 : tabIndex + 1,
+      tabsWindow.tabs.length - 1,
+    )
+  }
+
   this.windows[windowId] = tabsWindow
   this.active = windowId
 }

@@ -75,7 +75,7 @@ describe('openFilesInWindow action', () => {
   it('should set active tab to the last opened file', async () => {
     const store = initWorkspaceState()
 
-    store.openFile = vi.fn(async () => 'fileId')
+    store.openFile = vi.fn(async filePath => filePath)
 
     await store.openFilesInWindow(['file1', 'file2'])
     await store.openFilesInWindow(['file3', 'file4'], store.workspace!)

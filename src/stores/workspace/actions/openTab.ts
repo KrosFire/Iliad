@@ -8,6 +8,8 @@ const openTab: WorkspaceActions['openTab'] = async function (windowId, tab, inde
 
   if (destWindow.__typename === 'ContainerWindow') throw Error('[openTab] Destination window is not a tab window')
 
+  index = index === -1 ? destWindow.tabs.length : index
+
   const existingTab = destWindow.tabs.find(({ id }) => id === tab.id)
 
   if (existingTab) {
@@ -17,7 +19,7 @@ const openTab: WorkspaceActions['openTab'] = async function (windowId, tab, inde
   }
 
   destWindow.tabs.splice(index, 0, tab)
-  destWindow.active = index
+  destWindow.active = index === -1 ? destWindow.tabs.length - 1 : Math.min(index, destWindow.tabs.length - 1)
   this.windows[windowId] = destWindow
 }
 

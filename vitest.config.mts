@@ -14,7 +14,15 @@ export default defineConfig({
     },
     coverage: {
       provider: 'istanbul',
-      exclude: ['**/node_modules/**', '**/dist/**', 'src/plugins/**', 'src-tauri/**'],
+      exclude: [
+        '**/node_modules/**',
+        '**/dist/**',
+        'src/plugins/**',
+        'src-tauri/**',
+        '.eslintrc.cjs',
+        'types/**',
+        'src/api/**',
+      ],
       reporter: ['text', 'json-summary', 'json'],
       reportOnFailure: true,
     },

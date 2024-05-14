@@ -48,3 +48,4 @@ DOSKEY ill="[Path to Iliad executable]"
 * Files synchronization
 * Persistent state
 * File system manipulation (rename, delete files and folders)
+* LSP for TypeScript

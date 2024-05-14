@@ -61,6 +61,9 @@ const fetchResources = async () => {
 
   await resolveAceResource('searchbox', 'ext')
 
+  await resolveAceResource('vscode', 'keybinding')
+  await resolveAceResource('keybinding_menu', 'ext')
+
   loaded.value = true
 }
 
@@ -75,6 +78,8 @@ const updateValue = async (value: string) => {
 }
 
 const aceGoToLocation = (editor: Ace.Editor, location: Location) => {
+  editor.resize(true)
+  editor.scrollToLine(location.range.start.line + 1, true, true, function () {})
   editor.gotoLine(location.range.start.line + 1, location.range.start.character, true)
   editor.selection.selectToPosition({
     row: location.range.end.line,
@@ -92,6 +97,7 @@ const init = async (editor: Ace.Editor) => {
 
   hoverTooltip.addToEditor(editor)
 
+  editor.setKeyboardHandler('ace/keyboard/vscode')
   editor.setOptions({
     enableBasicAutocompletion: true,
     enableSnippets: true,
@@ -114,14 +120,17 @@ const init = async (editor: Ace.Editor) => {
     },
     {
       name: 'goToDefinition',
-      bindKey: { win: 'Ctrl-D', mac: 'Command-D' },
+      bindKey: { win: 'Alt-D', mac: 'Alt-D' },
       exec: goToDefinition,
     },
     {
-      name: 'triggerAutocomplete',
-      bindKey: { win: 'Ctrk-.', mac: 'Command-.' },
-      exec: (editor: Ace.Editor) => {
-        editor.execCommand('startAutocomplete')
+      name: 'showKeyboardShortcuts',
+      bindKey: { win: 'Ctrl-Alt-h', mac: 'Command-Alt-h' },
+      exec: function (editor) {
+        ace.config.loadModule('ace/ext/keybinding_menu', function (module) {
+          module.init(editor)
+          ;(editor as any).showKeyboardShortcuts()
+        })
       },
     },
   ])
