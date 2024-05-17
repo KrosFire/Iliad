@@ -20,7 +20,7 @@ const schema: z.ZodDefault<z.ZodType<WorkspaceStore>> = z
         id: z.string(),
         path: z.string(),
         title: z.string(),
-        ext: z.string(),
+        ext: z.string().nullable(),
         dir: z.string(),
         lang: z.nativeEnum(KnownLanguages).nullable(),
         encoding: z.nativeEnum(FileEncodings),

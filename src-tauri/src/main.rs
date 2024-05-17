@@ -6,17 +6,18 @@ use std::collections::HashMap;
 use cli::handle_cli;
 use gui::handle_gui;
 
+mod cli;
 mod commands;
 mod errors;
-mod menu;
-mod cli;
 mod gui;
+mod menu;
 
-fn main() {    
+fn main() {
     tauri::Builder::default()
         .setup(|app| {
             assert_required_programs_exists().unwrap();
-            
+            install_required_programs().unwrap();
+
             if std::env::args_os().count() > 1 {
                 handle_cli(app)?;
             } else {
@@ -52,10 +53,7 @@ fn main() {
 }
 
 fn assert_required_programs_exists() -> Result<(), errors::Error> {
-    let mut programs_status = HashMap::from([
-        ("typescript-language-server", false),
-        ("tsserver", false),
-    ]);
+    let mut programs_status = HashMap::from([("npm", false)]);
 
     if let Ok(path) = std::env::var("PATH") {
         for p in path.split(":") {
@@ -70,8 +68,61 @@ fn assert_required_programs_exists() -> Result<(), errors::Error> {
 
     for (program, status) in programs_status {
         if !status {
-            return Err(errors::Error::GeneralError(format!("Required program {} not found in PATH", program)));
+            return Err(errors::Error::GeneralError(format!(
+                "Required program {} not found in PATH",
+                program
+            )));
         }
+    }
+
+    Ok(())
+}
+
+fn install_required_programs() -> Result<(), errors::Error> {
+    // TS LSP
+
+    let node_version = std::process::Command::new("node")
+        .arg("--version")
+        .output()
+        .expect("Failed to get node version")
+        .stdout;
+
+    let main_node_version = String::from_utf8(node_version)
+        .unwrap()
+        .trim()
+        .split(".")
+        .collect::<Vec<&str>>()[1..][0]
+        .parse::<u8>()
+        .unwrap();
+
+    let lsp_version: &str;
+
+    if main_node_version >= 18 {
+        lsp_version = "4.3.3";
+    } else if main_node_version >= 14 {
+        lsp_version = "3.3.2";
+    } else {
+        return Err(errors::Error::GeneralError(
+            "Minimum Node version 14 is required".to_string(),
+        ));
+    }
+
+    let output = std::process::Command::new("npm")
+        .args(&[
+            "install",
+            "--global",
+            &format!("typescript-language-server@{}", lsp_version).to_string(),
+            "typescript",
+        ])
+        .output()
+        .expect("Failed to install typescript-language-server");
+
+    if !output.status.success() {
+        return Err(errors::Error::GeneralError(
+            "Failed to install typescript-language-server".to_string(),
+        ));
+    } else {
+        println!("typescript-language-server installed successfully");
     }
 
     Ok(())

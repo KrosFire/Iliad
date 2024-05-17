@@ -51,12 +51,17 @@ const openDirectory: WorkspaceActions['openDirectory'] = async function (path) {
   newChildren.sort(compareFsNodes)
 
   let length = newChildren.length
-  while (length--) {
-    const child = newChildren[length]
-    const existingNode = dir.children.at(length)
-    if (existingNode?.path !== child.path) {
-      dir.children = newChildren
-      break
+
+  if (length !== dir.children.length) {
+    dir.children = newChildren
+  } else {
+    while (length--) {
+      const child = newChildren[length]
+      const existingNode = dir.children.at(length)
+      if (existingNode?.path !== child.path) {
+        dir.children = newChildren
+        break
+      }
     }
   }
 

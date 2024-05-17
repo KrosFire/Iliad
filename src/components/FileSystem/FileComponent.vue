@@ -17,6 +17,8 @@ const selected = computed(() =>
   store.selectedFsNodes.some(({ path: selectedPath }) => props.fsNode.path === selectedPath),
 )
 
+const indentSize = ((props.indent ?? 0) + 1) * 20
+
 const startDrag = (event: DragEvent) => {
   const selectedFiles = store.selectedFsNodes.map(({ path }) => path)
 
@@ -65,7 +67,7 @@ const openContextMenu = (e: MouseEvent) => {
       'text-ellipsis',
       'overflow-hidden',
     ]"
-    :style="`padding-left: ${((indent ?? 0) + 1) * 20}px`"
+    :style="`padding-left: ${indentSize}px`"
     :draggable="true"
     @click.meta.stop.prevent="selectFile('multiple')"
     @click.shift.stop.prevent="selectFile('mass')"
@@ -83,7 +85,7 @@ const openContextMenu = (e: MouseEvent) => {
     v-model="fileName"
     type="text"
     :class="['p-1', 'block', 'bg-shadow', 'border-accent', 'text-text', 'overflow-hidden', 'text-ellipsis']"
-    :style="indent ? `margin-left: ${indent * 20}px` : ''"
+    :style="indent ? `margin-left: ${indentSize}px` : ''"
     @blur="renameFile"
   />
 </template>

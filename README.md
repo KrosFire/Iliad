@@ -8,8 +8,7 @@ An IDE build on [Tauri](https://tauri.app/) with [Rust](https://www.rust-lang.or
 
 ### Prerequisites
 
-* [Node](https://nodejs.org/en) installed
-* [Typescript LSP](https://github.com/typescript-language-server/typescript-language-server) installed
+* [Node](https://nodejs.org/en) version >=14 installed
 
 ### Installing Iliad
 
